@@ -359,7 +359,7 @@ if st.session_state.logged_in:
             st.experimental_rerun()
 
     if files:
-        st.write(f'All files are:')
+        st.write(f'Все файлы:')
         for file in files:
             display_file_with_thumbnail(file)
             if st.button("Delete", key=f"delete_{file['url']}"):
