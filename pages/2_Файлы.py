@@ -31,7 +31,7 @@ if not pytesseract.pytesseract.tesseract_cmd:
 
 # firestore database
 db = firestore.client()
-bucket = storage.bucket('elmeto-12de0.appspot.com')
+bucket = storage.bucket('elmento-ru.appspot.com')
 
 # logged in parameter
 if 'logged_in' not in st.session_state:
