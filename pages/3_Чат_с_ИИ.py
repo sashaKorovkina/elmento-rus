@@ -49,7 +49,7 @@ def display_messages(chat_id, username):
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
-st.title("Chat To AI")
+st.title("Пообщаться с Elmento")
 
 # MAIN SCRIPT
 if 'logged_in' in st.session_state and st.session_state.logged_in:
