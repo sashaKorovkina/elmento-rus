@@ -265,7 +265,7 @@ def pdf_parse_content(pdf_bytes):
         'file_id' : file['doc_id']
     })
 
-    nav_page("Чат_с_ИИ")
+    nav_page("https://elmento-ru.streamlit.app/%D0%A7%D0%B0%D1%82_%D1%81_%D0%98%D0%98")
 
 def upload_file(uploaded_file, thumbnail_stream):
     blob = bucket.blob(f"{username}/{uuid.uuid4()}_{uploaded_file.name}")
