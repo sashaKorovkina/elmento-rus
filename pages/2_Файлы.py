@@ -375,4 +375,4 @@ if st.session_state.logged_in:
                 if st.button("Get Summary", key=f"chat_summary_{file['url']}"):
                     get_summary(pdf_bytes, file['filename'])
 else:
-    st.write('Register please.')
+    st.write('Пожалуйста, войдите в систему или зарегистрируйтесь, чтобы просмотреть эту страницу.')
