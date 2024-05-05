@@ -350,6 +350,16 @@ if st.session_state.logged_in:
     existing_file_names = [file['filename'] for file in files]  # List of existing file names
 
     with st.form("my-form", clear_on_submit=True):
+        css = """
+        <style>
+            /* This CSS selector targets elements by class, id, or any specific attributes that need customization */
+            .css-selector {
+                /* CSS properties */
+                font-family: 'Arial';
+            }
+        </style>
+        """
+        st.markdown(css, unsafe_allow_html=True)
         uploaded_file = st.file_uploader("Загрузчик файлов")
         submitted = st.form_submit_button("Загрузить")
 
