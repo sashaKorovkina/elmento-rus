@@ -350,8 +350,8 @@ if st.session_state.logged_in:
     existing_file_names = [file['filename'] for file in files]  # List of existing file names
 
     with st.form("my-form", clear_on_submit=True):
-        uploaded_file = st.file_uploader("FILE UPLOADER")
-        submitted = st.form_submit_button("UPLOAD!")
+        uploaded_file = st.file_uploader("Загрузчик файлов")
+        submitted = st.form_submit_button("Загрузить")
 
         if uploaded_file and uploaded_file.name not in existing_file_names:
             file = upload_single_file(uploaded_file)
