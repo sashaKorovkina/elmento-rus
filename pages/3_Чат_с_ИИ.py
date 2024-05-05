@@ -86,5 +86,5 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                 })
 
 else:
-    st.write('Please register or login to continue.')
+    st.write('Пожалуйста, войдите в систему или зарегистрируйтесь, чтобы просмотреть эту страницу.')
 
