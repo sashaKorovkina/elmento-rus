@@ -133,28 +133,32 @@ def get_summary(pdf_bytes, file_name):
 
 
 def nav_page(page_name, timeout_secs=3):
-    nav_script = """
+    page_name_lower = page_name.lower()
+    nav_script = f"""
         <script type="text/javascript">
-            function attempt_nav_page(page_name, start_time, timeout_secs) {
+            function attempt_nav_page(page_name, start_time, timeout_secs) {{
                 var links = window.parent.document.getElementsByTagName("a");
-                for (var i = 0; i < links.length; i++) {
-                    if (links[i].href.toLowerCase().endsWith("/" + page_name.toLowerCase())) {
+                for (var i = 0; i < links.length; i++) {{
+                    var href = decodeURIComponent(links[i].href);
+                    if (href.toLowerCase().endsWith("/" + page_name)) {{
                         links[i].click();
                         return;
-                    }
-                }
+                    }}
+                }}
                 var elapsed = new Date() - start_time;
-                if (elapsed < timeout_secs * 1000) {
-                    setTimeout(attempt_nav_page, 100, page_name, start_time, timeout_secs); // Corrected this line
-                } else {
+                if (elapsed < timeout_secs * 1000) {{
+                    setTimeout(function() {{
+                        attempt_nav_page(page_name, start_time, timeout_secs);
+                    }}, 100);
+                }} else {{
                     alert("Unable to navigate to page '" + page_name + "' after " + timeout_secs + " second(s).");
-                }
-            }
-            window.addEventListener("load", function() {
-                attempt_nav_page("%s", new Date(), %d);
-            });
+                }}
+            }}
+            window.addEventListener("load", function() {{
+                attempt_nav_page("{page_name_lower}", new Date(), {timeout_secs});
+            }});
         </script>
-    """ % (page_name, timeout_secs)
+    """
     html(nav_script)
 
 
