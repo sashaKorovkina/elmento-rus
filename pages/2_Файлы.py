@@ -355,13 +355,6 @@ if st.session_state.logged_in:
             [data-testid='stFileUploader'] {
             width: max-content;
             }
-            [data-testid='stFileUploader'] section {
-                padding: 0;
-                float: left;
-            }
-            [data-testid='stFileUploader'] section > input + div {
-                display: none;
-            }
             
         </style>
         """
