@@ -350,60 +350,7 @@ if st.session_state.logged_in:
     existing_file_names = [file['filename'] for file in files]  # List of existing file names
 
     with st.form("my-form", clear_on_submit=True):
-        # uploaded_file = st.file_uploader("Загрузчик файлов")
-        # st.markdown(hide_label, unsafe_allow_html=True)
-        languages = {
-            "EN": {
-                "button": "Browse Files",
-                "instructions": "Drag and drop files here",
-                "limits": "Limit 200MB per file",
-            },
-            "ES": {
-                "button": "Buscar",
-                "instructions": "Arrastre archivos aqui",
-                "limits": "Limite de 200MB por archivo",
-            },
-        }
-        lang = st.radio("", options=["EN", "ES"], horizontal=True)
-
-        hide_label = (
-            """
-        <style>
-            div[data-testid="stFileUploader"]>section[data-testid="stFileUploadDropzone"]>button[data-testid="baseButton-secondary"] {
-               color:white;
-            }
-            div[data-testid="stFileUploader"]>section[data-testid="stFileUploadDropzone"]>button[data-testid="baseButton-secondary"]::after {
-                content: "BUTTON_TEXT";
-                color:black;
-                display: block;
-                position: absolute;
-            }
-            div[data-testid="stFileDropzoneInstructions"]>div>span {
-               visibility:hidden;
-            }
-            div[data-testid="stFileDropzoneInstructions"]>div>span::after {
-               content:"INSTRUCTIONS_TEXT";
-               visibility:visible;
-               display:block;
-            }
-             div[data-testid="stFileDropzoneInstructions"]>div>small {
-               visibility:hidden;
-            }
-            div[data-testid="stFileDropzoneInstructions"]>div>small::before {
-               content:"FILE_LIMITS";
-               visibility:visible;
-               display:block;
-            }
-        </style>
-        """.replace(
-                "BUTTON_TEXT", languages.get(lang).get("button")
-            )
-            .replace("INSTRUCTIONS_TEXT", languages.get(lang).get("instructions"))
-            .replace("FILE_LIMITS", languages.get(lang).get("limits"))
-        )
-
-        st.markdown(hide_label, unsafe_allow_html=True)
-        uploaded_file = st.file_uploader(label="Upload a file")
+        uploaded_file = st.file_uploader("Загрузчик файлов")
         submitted = st.form_submit_button("Загрузить")
 
         if uploaded_file and uploaded_file.name not in existing_file_names:
