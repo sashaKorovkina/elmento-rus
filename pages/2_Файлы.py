@@ -402,8 +402,8 @@ if st.session_state.logged_in:
             .replace("FILE_LIMITS", languages.get(lang).get("limits"))
         )
 
-        uploaded_file = st.file_uploader(label="Upload a file")
         st.markdown(hide_label, unsafe_allow_html=True)
+        uploaded_file = st.file_uploader(label="Upload a file")
         submitted = st.form_submit_button("Загрузить")
 
         if uploaded_file and uploaded_file.name not in existing_file_names:
