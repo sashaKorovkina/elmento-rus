@@ -353,7 +353,6 @@ if st.session_state.logged_in:
         css = """
         <style>
             [data-testid='stFileUploader'] {
-                width: max-content;
                 content: 'Hi';
             }
         </style>
