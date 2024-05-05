@@ -353,7 +353,7 @@ if st.session_state.logged_in:
         css = """
         <style>
             [data-testid='stFileUploader'] {
-                content: 'Hi';
+                content: "Hi";
             }
         </style>
         """
