@@ -265,7 +265,7 @@ def pdf_parse_content(pdf_bytes):
         'file_id' : file['doc_id']
     })
 
-    nav_page("chat_to_ai")
+    nav_page("Чат_с_ИИ")
 
 def upload_file(uploaded_file, thumbnail_stream):
     blob = bucket.blob(f"{username}/{uuid.uuid4()}_{uploaded_file.name}")
