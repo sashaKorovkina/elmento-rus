@@ -362,10 +362,7 @@ if st.session_state.logged_in:
             [data-testid='stFileUploader'] section > input + div {
                 display: none;
             }
-            [data-testid='stFileUploader'] section + div {
-                float: right;
-                padding-top: 0;
-            }
+            
         </style>
         """
         st.markdown(css, unsafe_allow_html=True)
