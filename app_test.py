@@ -27,7 +27,7 @@ def create_chat_completion(response: str, role: str = "assistant") -> ChatComple
 
 @patch("openai.resources.chat.Completions.create")
 def test_Chatbot(openai_create):
-    at = AppTest.from_file("About_Elmento.py").run()
+    at = AppTest.from_file("О_Elmento.py").run()
     assert not at.exception
     at.chat_input[0].set_value("Do you know any jokes?").run()
     assert at.info[0].value == "Please add your OpenAI API key to continue."
