@@ -340,7 +340,7 @@ def get_img_blob(file):
     image_bytes = blob.download_as_bytes()
     return image_bytes
 
-st.title("Documents")
+st.title("Мои Документы")
 
 if st.session_state.logged_in:
     api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
