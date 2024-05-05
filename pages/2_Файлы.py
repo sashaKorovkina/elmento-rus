@@ -352,10 +352,24 @@ if st.session_state.logged_in:
     with st.form("my-form", clear_on_submit=True):
         css = """
         <style>
-            [data-testid='stFileUploader'] {
-            width: max-content;
+            /* Increase the z-index for the uploader so it's clickable through the overlay */
+            [data-testid='stFileUploader'] > div > div > button {
+                color: transparent;
+                z-index: 100;
             }
-            
+            /* Custom overlay button */
+            [data-testid='stFileUploader'] > div > div > button::after {
+                content: 'Hi';
+                color: black; /* Change the text color here */
+                position: absolute;
+                left: 10px; /* Adjust horizontal position of the text */
+                top: 6px; /* Adjust vertical position of the text */
+                z-index: 101;
+            }
+            /* Adjust the width of the file uploader */
+            [data-testid='stFileUploader'] {
+                width: max-content;
+            }
         </style>
         """
         st.markdown(css, unsafe_allow_html=True)
