@@ -47,7 +47,7 @@ def f():
         user = auth.get_user_by_email(email)
         print(user.uid)
 
-        st.success('Login Successfully!')
+        st.success('Вход выполнен успешно!')
 
         st.session_state.username = user.uid
         st.session_state.useremail = user.email
@@ -56,7 +56,7 @@ def f():
         st.session_state.signedout = True
         st.session_state['logged_in'] = True
     except:
-        st.warning('Login Failed')
+        st.warning('Ошибка входа')
 
 # sign out function
 def t():
@@ -74,20 +74,20 @@ if not st.session_state['signedout']:
     st.session_state.db = db
     docs = db.collection('users').get()
 
-    choice = st.selectbox('Login/Signup', ['Login', 'Sign Up'])
+    choice = st.selectbox('Вход/Регистрация', ['Login', 'Sign Up'])
 
     if choice == 'Login':
-        email = st.text_input('Email Address')
-        password = st.text_input('Password', type='password')
+        email = st.text_input('Адрес электронной почты')
+        password = st.text_input('Пароль', type='password')
         st.button('Login', on_click=f)
 
     else:
-        email = st.text_input('Email Address')
-        password = st.text_input('Password', type='password')
+        email = st.text_input('Адрес электронной почты')
+        password = st.text_input('Пароль', type='password')
 
-        username = st.text_input('Enter your unique username')
+        username = st.text_input('Введите ваше уникальное имя пользователя.')
 
-        if st.button('Create my account'):
+        if st.button('Создать мой аккаунт'):
             user = auth.create_user(email=email, password=password)
 
             doc_ref = db.collection('users').document(user.uid)
@@ -96,8 +96,8 @@ if not st.session_state['signedout']:
                 'email': email,
             })
 
-            st.success('Account created successfully!')
-            st.markdown('Please login using your email and password')
+            st.success('Аккаунт успешно создан!')
+            st.markdown('Пожалуйста, войдите в систему, используя вашу электронную почту и пароль.')
             st.balloons()
 
 
