@@ -352,10 +352,19 @@ if st.session_state.logged_in:
     with st.form("my-form", clear_on_submit=True):
         css = """
         <style>
-            /* This CSS selector targets elements by class, id, or any specific attributes that need customization */
-            .css-selector {
-                /* CSS properties */
-                font-family: 'Arial';
+            [data-testid='stFileUploader'] {
+            width: max-content;
+            }
+            [data-testid='stFileUploader'] section {
+                padding: 0;
+                float: left;
+            }
+            [data-testid='stFileUploader'] section > input + div {
+                display: none;
+            }
+            [data-testid='stFileUploader'] section + div {
+                float: right;
+                padding-top: 0;
             }
         </style>
         """
