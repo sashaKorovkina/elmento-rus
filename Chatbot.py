@@ -1,11 +1,8 @@
 from openai import OpenAI
 import streamlit as st
 
-
-st.title("FAQ")
-
 # Display FAQs
-st.header("Часто задаваемые вопросы (FAQ):")
+st.title("Часто задаваемые вопросы (FAQ):")
 
 st.markdown("""
 1. **Как пользоваться нейросетью?**
