@@ -66,8 +66,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
 
         if selected_chat_data:
-            st.write(f"Starting chat session FOR: {selected_chat_data['filename']}")
-            st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
+            st.write(f"Начало чат-сессии ДЛЯ: {selected_chat_data['filename']}")
+            # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
             display_messages(selected_chat_data['chat_id'], username)
             if prompt := st.chat_input("What is up?"):
                 chat_id = selected_chat_data['chat_id']
