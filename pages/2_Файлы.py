@@ -388,6 +388,7 @@ if st.session_state.logged_in:
         page = st.selectbox("Page", range(1, num_batches + 1))
 
     batch = files[(page - 1) * batch_size: page * batch_size]
+    st.write(batch)
 
     if files:
         st.write(f'Все файлы:')
