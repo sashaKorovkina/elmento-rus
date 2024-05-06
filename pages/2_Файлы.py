@@ -395,7 +395,7 @@ if st.session_state.logged_in:
             # Convert image data to PIL image and get size
             pil_image = Image.open(BytesIO(image_data))
             w, h = pil_image.size
-            print(w, h)
+            st.write(w, h)
             if st.button("Удалить", key=f"delete_{file['url']}"):
                 delete_file(username, file['doc_id'])  # Function to delete the file
             file_extension = file['filename'].split(".")[-1].lower()
