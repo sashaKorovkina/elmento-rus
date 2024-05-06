@@ -402,7 +402,7 @@ if st.session_state.logged_in:
 
                 if file_extension in ["jpg", "jpeg", "png"]:
                     image_bytes = get_img_blob(file)
-                    send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
+                    send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}", use_container_width=True)
 
                 elif file_extension == "pdf":
                     pdf_bytes = get_img_blob(file)
