@@ -398,20 +398,20 @@ if st.session_state.logged_in:
                 image_bytes = get_img_blob(file)
                 send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
             elif file_extension == "pdf":
-                st.markdown(
-                    """
-                <style>
-                button {
-                    height: auto;
-                    padding-top: 10px !important;
-                    padding-bottom: 10px !important;
-                }
-                </style>
-                """,
-                    unsafe_allow_html=True,
-                )
+                # st.markdown(
+                #     """
+                # <style>
+                # button {
+                #     height: auto;
+                #     padding-top: 10px !important;
+                #     padding-bottom: 10px !important;
+                # }
+                # </style>
+                # """,
+                #     unsafe_allow_html=True,
+                # )
                 pdf_bytes = get_img_blob(file)
-                if st.button("Общение с ИИ", key=f"chat_{file['url']}"):
+                if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
                     pdf_parse_content(pdf_bytes)
                 if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
                     get_summary(pdf_bytes, file['filename'])
