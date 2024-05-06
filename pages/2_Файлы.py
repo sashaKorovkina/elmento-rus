@@ -371,7 +371,7 @@ if st.session_state.logged_in:
         columns = st.columns(3)  # Create three columns
         for i, file in enumerate(files):
             with columns[i % 3]:  # Distribute files evenly across columns
-                display_file_with_thumbnail(file)
+                #display_file_with_thumbnail(file)
                 if st.button("Удалить", key=f"delete_{file['url']}"):
                     delete_file(username, file['doc_id'])  # Function to delete the file
                 file_extension = file['filename'].split(".")[-1].lower()
@@ -384,7 +384,5 @@ if st.session_state.logged_in:
                         pdf_parse_content(pdf_bytes)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
                         get_summary(pdf_bytes, file['filename'])
-        column_widths_pixels = [column.get_css_property("width")["value"] for column in columns]
-        st.write(f"Width of each column (pixels): {column_widths_pixels}")
 else:
     st.write('Пожалуйста, войдите в систему или зарегистрируйтесь, чтобы просмотреть эту страницу.')
