@@ -381,9 +381,9 @@ if st.session_state.logged_in:
     batch = files[(page - 1) * batch_size: page * batch_size]
 
     grid = st.columns(row_size)
+    max_heights = [0] * row_size  # Initialize list to store maximum heights of images in each row
+    target_height = 300  # Set the target height for all images
     col = 0
-
-    max_heights = [0] * row_size
 
     for file in batch:
         with grid[col]:
@@ -392,11 +392,37 @@ if st.session_state.logged_in:
             response = requests.get(file['thumbnail_url'])
             image_data = response.content
 
-            # Convert image data to PIL image and get size
+            # Convert image data to PIL image
             pil_image = Image.open(BytesIO(image_data))
-            w, h = pil_image.size
-            st.write(w, h)
-            if st.button("Удалить", key=f"delete_{file['url']}"):
+
+            # Get the original image size
+            orig_width, orig_height = pil_image.size
+
+            # Calculate the ratio to resize the image while maintaining aspect ratio
+            resize_ratio = target_height / orig_height
+            new_width = int(orig_width * resize_ratio)
+            new_height = int(orig_height * resize_ratio)
+
+            # Resize the image to match the target height
+            resized_image = pil_image.resize((new_width, new_height), Image.ANTIALIAS)
+
+            # Create a new blank image with the target height
+            padded_image = Image.new("RGB", (new_width, target_height), color="white")
+
+            # Calculate the top padding to center the resized image vertically
+            top_padding = (target_height - new_height) // 2
+
+            # Paste the resized image onto the padded image
+            padded_image.paste(resized_image, (0, top_padding))
+
+            # Display the padded image
+            st.image(padded_image, caption=file['filename'], width=200)
+
+            # Record the height of the padded image
+            image_height = target_height
+            max_heights[col] = max(max_heights[col], image_height)
+
+        if st.button("Удалить", key=f"delete_{file['url']}"):
                 delete_file(username, file['doc_id'])  # Function to delete the file
             file_extension = file['filename'].split(".")[-1].lower()
             if file_extension in ["jpg", "jpeg", "png"]:
