@@ -348,7 +348,8 @@ def get_img_blob(file):
 st.title("Мои Документы")
 
 if st.session_state.logged_in:
-    api_key = st.secrets['OPENAI_API_KEY']
+    api_key = st.secrets['openai-api-key']
+    st.write(api_key)
 
     #api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
     username = st.session_state.username
