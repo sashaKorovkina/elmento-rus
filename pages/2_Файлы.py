@@ -315,13 +315,10 @@ def delete_file(username, file_id):
         st.write(f"An error occurred while trying to delete the file: {e}")
 
 def display_file_with_thumbnail(file):
-    screen_width = st.report_thread.get_report_ctx().enqueue.get_width()
-    thumbnail_width = screen_width // 3  # One-third of the screen width
     if file.get('thumbnail_url'):
-        st.image(file['thumbnail_url'], caption=file['filename'], width=thumbnail_width)
+        st.image(file['thumbnail_url'], caption=file['filename'], width=200)
     else:
         st.markdown(f"[{file['filename']}]({file['url']})")
-
 
 def upload_single_file(uploaded_file):
     print('Uploading new file...')
