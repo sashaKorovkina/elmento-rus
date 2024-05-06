@@ -1,4 +1,7 @@
+import base64
 import streamlit as st
+import requests
+from PIL import Image
 import io
 import pytesseract
 import shutil
@@ -11,9 +14,7 @@ import contextlib
 import base64
 import pandas as pd
 from math import ceil
-import requests
-from PIL import Image
-from io import BytesIO
+
 
 # CHANGE FOR CLOUD DEPLOY!!!!
 pytesseract.pytesseract.tesseract_cmd = None
@@ -381,59 +382,27 @@ if st.session_state.logged_in:
     batch = files[(page - 1) * batch_size: page * batch_size]
 
     grid = st.columns(row_size)
-    max_heights = [0] * row_size  # Initialize list to store maximum heights of images in each row
-    target_height = 300  # Set the target height for all images
     col = 0
+
+    max_heights = [0] * row_size
 
     for file in batch:
         with grid[col]:
             st.image(file['thumbnail_url'], caption=file['filename'])
-            # Fetch image data from URL
-            response = requests.get(file['thumbnail_url'])
-            image_data = response.content
 
-            # Convert image data to PIL image
-            pil_image = Image.open(BytesIO(image_data))
-
-            # Get the original image size
-            orig_width, orig_height = pil_image.size
-            st.write(orig_width, orig_height)
-
-            # Calculate the ratio to resize the image while maintaining aspect ratio
-            resize_ratio = target_height / orig_height
-            new_width = int(orig_width * resize_ratio)
-            new_height = int(orig_height * resize_ratio)
-
-            st.write(new_width, new_height)
-
-            # Resize the image to match the target height
-            resized_image = pil_image.resize((new_width, new_height), Image.BICUBIC)
-
-            # Create a new blank image with the target height
-            padded_image = Image.new("RGB", (new_width, target_height), color="white")
-
-            # Calculate the top padding to center the resized image vertically
-            top_padding = (target_height - new_height) // 2
-
-            # Paste the resized image onto the padded image
-            padded_image.paste(resized_image, (0, top_padding))
-
-            # Display the padded image
-            st.image(padded_image, caption=file['filename'], width=200)
-
-        if st.button("Удалить", key=f"delete_{file['url']}"):
-            delete_file(username, file['doc_id'])  # Function to delete the file
-        file_extension = file['filename'].split(".")[-1].lower()
-        if file_extension in ["jpg", "jpeg", "png"]:
-            image_bytes = get_img_blob(file)
-            send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
-        elif file_extension == "pdf":
-            pdf_bytes = get_img_blob(file)
-            if st.button("Общение с ИИ", key=f"chat_{file['url']}"):
-                pdf_parse_content(pdf_bytes)
-            if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
-                get_summary(pdf_bytes, file['filename'])
-    col = (col + 1) % row_size
+            if st.button("Удалить", key=f"delete_{file['url']}"):
+                delete_file(username, file['doc_id'])  # Function to delete the file
+            file_extension = file['filename'].split(".")[-1].lower()
+            if file_extension in ["jpg", "jpeg", "png"]:
+                image_bytes = get_img_blob(file)
+                send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
+            elif file_extension == "pdf":
+                pdf_bytes = get_img_blob(file)
+                if st.button("Общение с ИИ", key=f"chat_{file['url']}"):
+                    pdf_parse_content(pdf_bytes)
+                if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
+                    get_summary(pdf_bytes, file['filename'])
+            col = (col + 1) % row_size
 
 
     # if files:
