@@ -383,6 +383,9 @@ if st.session_state.logged_in:
 
     grid = st.columns(row_size)
     col = 0
+    max_height = 0  # Initialize max_height variable
+
+
     for file in batch:
         with grid[col]:
             st.image(file['thumbnail_url'], caption=file['filename'])
@@ -399,6 +402,10 @@ if st.session_state.logged_in:
                 if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
                     get_summary(pdf_bytes, file['filename'])
             col = (col + 1) % row_size
+    st.markdown(
+        f'<style>.stImage > img {{ max-height: {max_height}px !important; }}</style>',
+        unsafe_allow_html=True
+    )
 
     # if files:
     #     st.write(f'Все файлы:')
