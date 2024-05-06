@@ -407,7 +407,7 @@ if st.session_state.logged_in:
             st.write(new_width, new_height)
 
             # Resize the image to match the target height
-            resized_image = pil_image.resize(new_width, new_height)
+            resized_image = pil_image.resize((new_width, new_height), Image.BICUBIC)
 
             # Create a new blank image with the target height
             padded_image = Image.new("RGB", (new_width, target_height), color="white")
