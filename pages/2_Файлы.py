@@ -367,42 +367,22 @@ if st.session_state.logged_in:
             st.experimental_rerun()
 
     if files:
-        st.write('Все файлы:')
+        st.write(f'Все файлы:')
         columns = st.columns(3)  # Create three columns
-        max_height = 300  # Set a maximum height for thumbnails
-
-        if files:
-            st.write('Все файлы:')
-            columns = st.columns(3)  # Create three columns
-            max_height = 300  # Set a maximum height for thumbnails
-
-            for i, file in enumerate(files):
-                with columns[i % 3]:  # Distribute files evenly across columns
-                    # Resize the thumbnail to fit within max_height while maintaining aspect ratio
-                    if file.get('thumbnail_url'):
-                        thumbnail_url = file['thumbnail_url']
-                        thumbnail_info = st.image(thumbnail_url)
-                        thumbnail_height = min(max_height, thumbnail_info.height)
-                        thumbnail_width = thumbnail_info.width * (thumbnail_height / thumbnail_info.height)
-                        st.write(thumbnail_height)
-                        st.write(thumbnail_width)
-                        st.image(thumbnail_url, caption=file['filename'], width=thumbnail_width,
-                                 height=thumbnail_height)
-                    else:
-                        st.markdown(f"[{file['filename']}]({file['url']})")
-
-                    # Add delete button and other functionalities
-                    if st.button("Удалить", key=f"delete_{file['url']}"):
-                        delete_file(username, file['doc_id'])  # Function to delete the file
-                    file_extension = file['filename'].split(".")[-1].lower()
-                    if file_extension in ["jpg", "jpeg", "png"]:
-                        image_bytes = get_img_blob(file)
-                        send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
-                    elif file_extension == "pdf":
-                        pdf_bytes = get_img_blob(file)
-                        if st.button("Общение с ИИ", key=f"chat_{file['url']}"):
-                            pdf_parse_content(pdf_bytes)
-                        if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
-                            get_summary(pdf_bytes, file['filename'])
+        for i, file in enumerate(files):
+            with columns[i % 3]:  # Distribute files evenly across columns
+                display_file_with_thumbnail(file)
+                if st.button("Удалить", key=f"delete_{file['url']}"):
+                    delete_file(username, file['doc_id'])  # Function to delete the file
+                file_extension = file['filename'].split(".")[-1].lower()
+                if file_extension in ["jpg", "jpeg", "png"]:
+                    image_bytes = get_img_blob(file)
+                    send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
+                elif file_extension == "pdf":
+                    pdf_bytes = get_img_blob(file)
+                    if st.button("Общение с ИИ", key=f"chat_{file['url']}"):
+                        pdf_parse_content(pdf_bytes)
+                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
+                        get_summary(pdf_bytes, file['filename'])
 else:
     st.write('Пожалуйста, войдите в систему или зарегистрируйтесь, чтобы просмотреть эту страницу.')
