@@ -383,9 +383,15 @@ if st.session_state.logged_in:
 
     grid = st.columns(row_size)
     col = 0
+
+    max_heights = [0] * row_size
+
     for file in batch:
         with grid[col]:
-            st.image(file['thumbnail_url'], caption=file['filename'])
+            image = st.image(file['thumbnail_url'], caption=file['filename'])
+            image_height = image.height
+            max_heights[col] = max(max_heights[col], image_height)
+
             if st.button("Удалить", key=f"delete_{file['url']}"):
                 delete_file(username, file['doc_id'])  # Function to delete the file
             file_extension = file['filename'].split(".")[-1].lower()
@@ -400,9 +406,10 @@ if st.session_state.logged_in:
                     get_summary(pdf_bytes, file['filename'])
             col = (col + 1) % row_size
 
-
-    # if files:
-    #     st.write(f'Все файлы:')
-
+    for col, max_height in enumerate(max_heights):
+        grid[col].markdown(
+            f'<style>.stImage > img {{ max-height: {max_height}px !important; }}</style>',
+            unsafe_allow_html=True
+        )
 else:
     st.write('Пожалуйста, войдите в систему или зарегистрируйтесь, чтобы просмотреть эту страницу.')
