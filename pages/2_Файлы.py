@@ -392,7 +392,7 @@ if st.session_state.logged_in:
 
     grid = st.columns(row_size)
     col = 0
-    for image in batch:
+    for file in batch:
         with grid[col]:
             st.image(file['thumbnail_url'], caption=file['filename'])
             # st.image(image['thumbnail_url'], caption='bike')
