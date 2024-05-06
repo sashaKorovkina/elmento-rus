@@ -315,7 +315,6 @@ def delete_file(username, file_id):
         st.write(f"An error occurred while trying to delete the file: {e}")
 
 def display_file_with_thumbnail(file):
-    sorted_files = sorted(files, key=lambda x: x.get('uploaded_at', 0))
     if file.get('thumbnail_url'):
         st.image(file['thumbnail_url'], caption=file['filename'], width=300)
     else:
