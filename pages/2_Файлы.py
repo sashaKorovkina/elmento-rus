@@ -12,6 +12,9 @@ import datetime
 import fitz
 import contextlib
 import base64
+import pandas as pd
+from math import ceil
+
 
 # CHANGE FOR CLOUD DEPLOY!!!!
 pytesseract.pytesseract.tesseract_cmd = None
@@ -365,6 +368,26 @@ if st.session_state.logged_in:
             file = upload_single_file(uploaded_file)
             uploaded_file = None  # Clear the uploaded file after handling
             st.experimental_rerun()
+
+
+    def initialize():
+        df = pd.DataFrame({'file': files,
+                           'incorrect': [False] * len(files),
+                           'label': [''] * len(files)})
+        df.set_index('file', inplace=True)
+        return df
+
+
+    controls = st.columns(3)
+    with controls[0]:
+        batch_size = st.select_slider("Batch size:", range(10, 110, 10))
+    with controls[1]:
+        row_size = st.select_slider("Row size:", range(1, 6), value=5)
+    num_batches = ceil(len(files) / batch_size)
+    with controls[2]:
+        page = st.selectbox("Page", range(1, num_batches + 1))
+
+    batch = files[(page - 1) * batch_size: page * batch_size]
 
     if files:
         st.write(f'Все файлы:')
