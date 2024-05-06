@@ -389,10 +389,9 @@ if st.session_state.logged_in:
     for file in batch:
         with grid[col]:
             container = st.empty()
-            st.image(file['thumbnail_url'], caption=file['filename'])
-
             if st.button("🗑️", key=f"delete_{file['url']}"):
                 delete_file(username, file['doc_id'])  # Function to delete the file
+            st.image(file['thumbnail_url'], caption=file['filename'])
             file_extension = file['filename'].split(".")[-1].lower()
             if file_extension in ["jpg", "jpeg", "png"]:
                 image_bytes = get_img_blob(file)
