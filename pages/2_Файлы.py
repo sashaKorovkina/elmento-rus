@@ -367,11 +367,23 @@ if st.session_state.logged_in:
             st.experimental_rerun()
 
     if files:
-        st.write(f'Все файлы:')
+        st.write('Все файлы:')
         columns = st.columns(3)  # Create three columns
+        max_height = 300  # Set a maximum height for thumbnails
+
         for i, file in enumerate(files):
             with columns[i % 3]:  # Distribute files evenly across columns
-                display_file_with_thumbnail(file)
+                # Resize the thumbnail to fit within max_height while maintaining aspect ratio
+                if file.get('thumbnail_url'):
+                    thumbnail_url = file['thumbnail_url']
+                    thumbnail_height = min(max_height, st.image(thumbnail_url).height)
+                    thumbnail_width = st.image(thumbnail_url).width * (
+                                thumbnail_height / st.image(thumbnail_url).height)
+                    st.image(thumbnail_url, caption=file['filename'], width=thumbnail_width, height=thumbnail_height)
+                else:
+                    st.markdown(f"[{file['filename']}]({file['url']})")
+
+                # Add delete button and other functionalities
                 if st.button("Удалить", key=f"delete_{file['url']}"):
                     delete_file(username, file['doc_id'])  # Function to delete the file
                 file_extension = file['filename'].split(".")[-1].lower()
