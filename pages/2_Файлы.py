@@ -388,27 +388,28 @@ if st.session_state.logged_in:
 
     for file in batch:
         with grid[col]:
-            if st.button("🗑️", key=f"delete_{file['url']}", type="secondary"):
-                delete_file(username, file['doc_id'])  # Function to delete the file
-            # Row for the image
-            image_row = st.empty()
+            with st.container():
+                if st.button("🗑️", key=f"delete_{file['url']}", type="secondary"):
+                    delete_file(username, file['doc_id'])  # Function to delete the file
+                # Row for the image
+                image_row = st.empty()
 
-            # Display the image in the image row
-            image_row.image(file['thumbnail_url'], caption=file['filename'])
+                # Display the image in the image row
+                image_row.image(file['thumbnail_url'], caption=file['filename'])
 
-            # Place buttons in the button row
-            file_extension = file['filename'].split(".")[-1].lower()
+                # Place buttons in the button row
+                file_extension = file['filename'].split(".")[-1].lower()
 
-            if file_extension in ["jpg", "jpeg", "png"]:
-                image_bytes = get_img_blob(file)
-                send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
+                if file_extension in ["jpg", "jpeg", "png"]:
+                    image_bytes = get_img_blob(file)
+                    send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
 
-            elif file_extension == "pdf":
-                pdf_bytes = get_img_blob(file)
-                if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
-                    pdf_parse_content(pdf_bytes)
-                if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
-                    get_summary(pdf_bytes, file['filename'])
+                elif file_extension == "pdf":
+                    pdf_bytes = get_img_blob(file)
+                    if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
+                        pdf_parse_content(pdf_bytes)
+                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
+                        get_summary(pdf_bytes, file['filename'])
 
         col = (col + 1) % row_size
 
