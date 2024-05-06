@@ -315,6 +315,7 @@ def delete_file(username, file_id):
         st.write(f"An error occurred while trying to delete the file: {e}")
 
 def display_file_with_thumbnail(file):
+    sorted_files = sorted(files, key=lambda x: x.get('uploaded_at', 0))
     if file.get('thumbnail_url'):
         st.image(file['thumbnail_url'], caption=file['filename'], width=300)
     else:
@@ -348,21 +349,15 @@ def get_img_blob(file):
 st.title("Мои Документы")
 
 if st.session_state.logged_in:
-    api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
+    api_key = st.secrets['OPENAI_API_KEY']
+
+    #api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
     username = st.session_state.username
 
     files = get_existing_files()
     existing_file_names = [file['filename'] for file in files]  # List of existing file names
 
     with st.form("my-form", clear_on_submit=True):
-        css = """
-        <style>
-            [data-testid='stFileUploader'] {
-                content: "Hi";
-            }
-        </style>
-        """
-        st.markdown(css, unsafe_allow_html=True)
         uploaded_file = st.file_uploader("Загрузчик файлов")
         submitted = st.form_submit_button("Загрузить")
 
