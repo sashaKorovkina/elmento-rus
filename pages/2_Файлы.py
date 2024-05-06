@@ -388,6 +388,7 @@ if st.session_state.logged_in:
 
     for file in batch:
         with grid[col]:
+            container = st.empty()
             st.image(file['thumbnail_url'], caption=file['filename'])
 
             if st.button("Удалить", key=f"delete_{file['url']}"):
@@ -402,7 +403,8 @@ if st.session_state.logged_in:
                     pdf_parse_content(pdf_bytes)
                 if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
                     get_summary(pdf_bytes, file['filename'])
-            col = (col + 1) % row_size
+            container.empty().height(300)
+        col = (col + 1) % row_size
 
 
     # if files:
