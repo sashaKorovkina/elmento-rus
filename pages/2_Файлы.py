@@ -370,7 +370,8 @@ if st.session_state.logged_in:
     num_columns = 3
 
     # Calculate the width of each column
-    column_width = st._width / num_columns
+    report = st.report_thread.get_report_ctx().enqueue
+    column_width = report.get_width() / num_columns
 
     if files:
         st.write(f'Все файлы:')
