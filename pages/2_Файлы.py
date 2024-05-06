@@ -397,9 +397,6 @@ if st.session_state.logged_in:
                 # Display the image in the image row
                 image_row.image(file['thumbnail_url'], caption=file['filename'])
 
-                button_container = st.empty()
-                button_col = button_container.column()
-
                 # Place buttons in the button row
                 file_extension = file['filename'].split(".")[-1].lower()
 
@@ -413,11 +410,6 @@ if st.session_state.logged_in:
                         pdf_parse_content(pdf_bytes)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
                         get_summary(pdf_bytes, file['filename'])
-
-                # Aligning buttons within the button column
-                button_col.markdown(
-                    f'<style>div.stButton > button:nth-of-type(2) {{ margin-left: 10px; }}</style>',
-                    unsafe_allow_html=True)
 
         col = (col + 1) % row_size
 
