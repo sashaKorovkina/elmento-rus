@@ -389,7 +389,7 @@ if st.session_state.logged_in:
         row = i // row_size
         col = i % row_size
         with grid[col]:
-            st.image(file['thumbnail_url'], caption=file['filename'], width=200)
+            st.image(file['thumbnail_url'], caption=file['filename'])
 
     # if files:
     #     st.write(f'Все файлы:')
