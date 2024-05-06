@@ -414,7 +414,6 @@ if st.session_state.logged_in:
                     get_summary(pdf_bytes, file['filename'])
 
             # Aligning buttons with the image row
-            image_row.empty()
             button_row.markdown(
                 f'<style>div.stButton > button:nth-of-type(2) {{ margin-left: 10px; }}</style>',
                 unsafe_allow_html=True)
