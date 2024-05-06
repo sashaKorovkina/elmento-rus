@@ -390,7 +390,7 @@ if st.session_state.logged_in:
         with grid[col]:
             st.image(file['thumbnail_url'], caption=file['filename'])
             image_height = st.image(file['thumbnail_url']).height
-            st.wrote(image_height)
+            st.write(image_height)
             max_height = max(max_height, image_height)
             if st.button("Удалить", key=f"delete_{file['url']}"):
                 delete_file(username, file['doc_id'])  # Function to delete the file
