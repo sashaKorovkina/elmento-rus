@@ -384,6 +384,8 @@ if st.session_state.logged_in:
                         thumbnail_info = st.image(thumbnail_url)
                         thumbnail_height = min(max_height, thumbnail_info.height)
                         thumbnail_width = thumbnail_info.width * (thumbnail_height / thumbnail_info.height)
+                        st.write(thumbnail_height)
+                        st.write(thumbnail_width)
                         st.image(thumbnail_url, caption=file['filename'], width=thumbnail_width,
                                  height=thumbnail_height)
                     else:
