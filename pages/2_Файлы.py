@@ -389,6 +389,8 @@ if st.session_state.logged_in:
     for file in batch:
         with grid[col]:
             st.image(file['thumbnail_url'], caption=file['filename'])
+            image_height = st.image(file['thumbnail_url']).height
+            max_height = max(max_height, image_height)
             if st.button("Удалить", key=f"delete_{file['url']}"):
                 delete_file(username, file['doc_id'])  # Function to delete the file
             file_extension = file['filename'].split(".")[-1].lower()
