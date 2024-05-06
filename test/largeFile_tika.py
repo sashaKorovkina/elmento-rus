@@ -40,6 +40,7 @@ from nltk.tokenize import SpaceTokenizer
 import nltk
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
+from collections import Counter
 
 names = []
 
@@ -53,6 +54,11 @@ for text in texts:
     for n in nes:
         names.append(n)
 
-names_unique = set(names)
-print(names_unique)
+# Use Counter to create a dictionary of names and their counts
+names_count = Counter(names)
 
+sorted_names_count = sorted(names_count.items(), key=lambda item: item[1], reverse=True)
+
+# Print each name and its count, now sorted by count
+for name, count in sorted_names_count:
+    print(f"{name}: {count}")
