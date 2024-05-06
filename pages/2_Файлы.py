@@ -370,14 +370,6 @@ if st.session_state.logged_in:
             st.experimental_rerun()
 
 
-    def initialize():
-        df = pd.DataFrame({'file': files,
-                           'incorrect': [False] * len(files),
-                           'label': [''] * len(files)})
-        df.set_index('file', inplace=True)
-        return df
-
-
     controls = st.columns(3)
     with controls[0]:
         batch_size = st.select_slider("Batch size:", range(10, 110, 10))
