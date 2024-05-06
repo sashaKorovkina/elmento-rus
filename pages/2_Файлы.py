@@ -413,7 +413,7 @@ if st.session_state.logged_in:
                 pdf_bytes = get_img_blob(file)
                 if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
                     pdf_parse_content(pdf_bytes)
-                if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
+                if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
                     get_summary(pdf_bytes, file['filename'])
             container.markdown(
                 f'<style>div.stDataFrame.stDataFrame > div:nth-of-type({col + 1}) {{ height: 300px; }}</style>',
