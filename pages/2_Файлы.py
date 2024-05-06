@@ -403,13 +403,9 @@ if st.session_state.logged_in:
                     pdf_parse_content(pdf_bytes)
                 if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
                     get_summary(pdf_bytes, file['filename'])
-            container.markdown(f"""
-                        <style>
-                            div.stImage > img {{ height: 150px; }} /* Adjust image height as needed */
-                            div.stImage > div.caption_container > div.caption-content {{ height: 50px; }} /* Adjust caption height as needed */
-                            div.stImage > div.caption_container {{ padding-bottom: 20px; }} /* Add bottom padding */
-                        </style>
-                    """, unsafe_allow_html=True)
+            container.markdown(
+                f'<style>div.stDataFrame.stDataFrame > div:nth-of-type({col + 1}) {{ height: 300px; }}</style>',
+                unsafe_allow_html=True)
 
         col = (col + 1) % row_size
 
