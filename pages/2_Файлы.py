@@ -399,6 +399,7 @@ if st.session_state.logged_in:
             # st.checkbox("Incorrect", key=f'incorrect_{image}',
             #             value=df.at[image, 'incorrect'],
             #             on_change=update, args=(image, 'incorrect'))
+            col = (col + 1) % row_size
 
     # if files:
     #     st.write(f'Все файлы:')
