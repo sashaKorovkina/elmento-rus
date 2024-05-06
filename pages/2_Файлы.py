@@ -79,7 +79,7 @@ def send_image_to_openai(image_bytes, api_key, key):
               ],
               "max_tokens": 100
             }
-    if st.button("Get Explanation", key = key):
+    if st.button("Get Explanation", key = key, use_container_width=True):
         try:
             response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
             print(response.json())
@@ -402,7 +402,7 @@ if st.session_state.logged_in:
 
                 if file_extension in ["jpg", "jpeg", "png"]:
                     image_bytes = get_img_blob(file)
-                    send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}", use_container_width=True)
+                    send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
 
                 elif file_extension == "pdf":
                     pdf_bytes = get_img_blob(file)
