@@ -403,7 +403,10 @@ if st.session_state.logged_in:
                     pdf_parse_content(pdf_bytes)
                 if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
                     get_summary(pdf_bytes, file['filename'])
-            container.empty().height(300)
+            container.markdown(
+                f'<style>div.stDataFrame.stDataFrame > div:nth-of-type({col + 1}) {{ height: 300px; }}</style>',
+                unsafe_allow_html=True)
+
         col = (col + 1) % row_size
 
 
