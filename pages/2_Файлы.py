@@ -1,7 +1,4 @@
-import base64
 import streamlit as st
-import requests
-from PIL import Image
 import io
 import pytesseract
 import shutil
@@ -14,7 +11,9 @@ import contextlib
 import base64
 import pandas as pd
 from math import ceil
-
+import requests
+from PIL import Image
+from io import BytesIO
 
 # CHANGE FOR CLOUD DEPLOY!!!!
 pytesseract.pytesseract.tesseract_cmd = None
@@ -389,6 +388,14 @@ if st.session_state.logged_in:
     for file in batch:
         with grid[col]:
             st.image(file['thumbnail_url'], caption=file['filename'])
+            # Fetch image data from URL
+            response = requests.get(file['thumbnail_url'])
+            image_data = response.content
+
+            # Convert image data to PIL image and get size
+            pil_image = Image.open(BytesIO(image_data))
+            w, h = pil_image.size
+            print(w, h)
             if st.button("Удалить", key=f"delete_{file['url']}"):
                 delete_file(username, file['doc_id'])  # Function to delete the file
             file_extension = file['filename'].split(".")[-1].lower()
