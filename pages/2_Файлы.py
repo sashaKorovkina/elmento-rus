@@ -383,15 +383,9 @@ if st.session_state.logged_in:
 
     grid = st.columns(row_size)
     col = 0
-    max_height = 0  # Initialize max_height variable
-
-
     for file in batch:
         with grid[col]:
             st.image(file['thumbnail_url'], caption=file['filename'])
-            image_height = st.image(file['thumbnail_url']).height
-            st.write(image_height)
-            max_height = max(max_height, image_height)
             if st.button("Удалить", key=f"delete_{file['url']}"):
                 delete_file(username, file['doc_id'])  # Function to delete the file
             file_extension = file['filename'].split(".")[-1].lower()
@@ -405,10 +399,7 @@ if st.session_state.logged_in:
                 if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
                     get_summary(pdf_bytes, file['filename'])
             col = (col + 1) % row_size
-    st.markdown(
-        f'<style>.stImage > img {{ max-height: {max_height}px !important; }}</style>',
-        unsafe_allow_html=True
-    )
+
 
     # if files:
     #     st.write(f'Все файлы:')
