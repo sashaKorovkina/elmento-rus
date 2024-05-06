@@ -391,11 +391,11 @@ if st.session_state.logged_in:
             # Row for the image
             image_row = st.empty()
 
-            # Row for the buttons
-            button_row = st.empty()
-
             # Display the image in the image row
             image_row.image(file['thumbnail_url'], caption=file['filename'])
+
+            # Row for the buttons
+            button_row = st.empty()
 
             # Place buttons in the button row
             file_extension = file['filename'].split(".")[-1].lower()
