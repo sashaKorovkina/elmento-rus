@@ -390,11 +390,19 @@ if st.session_state.logged_in:
     batch = files[(page - 1) * batch_size: page * batch_size]
     st.write(batch)
 
+    grid = st.columns(row_size)
+    col = 0
+    for image in batch:
+        with grid[col]:
+            st.image(file['thumbnail_url'], caption=file['filename'])
+            # st.image(image['thumbnail_url'], caption='bike')
+            # st.checkbox("Incorrect", key=f'incorrect_{image}',
+            #             value=df.at[image, 'incorrect'],
+            #             on_change=update, args=(image, 'incorrect'))
+
     if files:
         st.write(f'Все файлы:')
-        columns = st.columns(3)  # Create three columns
         for i, file in enumerate(files):
-            with columns[i % 3]:  # Distribute files evenly across columns
                 display_file_with_thumbnail(file)
                 if st.button("Удалить", key=f"delete_{file['url']}"):
                     delete_file(username, file['doc_id'])  # Function to delete the file
