@@ -407,7 +407,7 @@ if st.session_state.logged_in:
             st.write(new_width, new_height)
 
             # Resize the image to match the target height
-            resized_image = pil_image.resize((new_width, new_height), Image.ANTIALIAS)
+            resized_image = pil_image.resize(new_width, new_height)
 
             # Create a new blank image with the target height
             padded_image = Image.new("RGB", (new_width, target_height), color="white")
@@ -420,10 +420,6 @@ if st.session_state.logged_in:
 
             # Display the padded image
             st.image(padded_image, caption=file['filename'], width=200)
-
-            # Record the height of the padded image
-            image_height = target_height
-            max_heights[col] = max(max_heights[col], image_height)
 
         if st.button("Удалить", key=f"delete_{file['url']}"):
             delete_file(username, file['doc_id'])  # Function to delete the file
