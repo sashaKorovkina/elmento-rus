@@ -380,7 +380,6 @@ if st.session_state.logged_in:
         page = st.selectbox("Page", range(1, num_batches + 1))
 
     batch = files[(page - 1) * batch_size: page * batch_size]
-    st.write(batch)
 
     grid = st.columns(row_size)
     col = 0
