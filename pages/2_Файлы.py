@@ -389,11 +389,16 @@ if st.session_state.logged_in:
     for file in batch:
         with grid[col]:
             image = st.image(file['thumbnail_url'], caption=file['filename'])
-            w, h = Image.open(file['thumbnail_url']).size
-            print(w, h)
-            #max_heights[col] = max(max_heights[col], image_height)
+            # # Fetch image data from URL
+            # response = requests.get(file['thumbnail_url'])
+            # image_data = response.content
+            #
+            # # Convert image data to PIL image and get size
+            # pil_image = Image.open(BytesIO(image_data))
+            # w, h = pil_image.size
+            # print(w, h)
 
-            if st.button("Удалить", key=f"delete_{file['url']}"):
+        if st.button("Удалить", key=f"delete_{file['url']}"):
                 delete_file(username, file['doc_id'])  # Function to delete the file
             file_extension = file['filename'].split(".")[-1].lower()
             if file_extension in ["jpg", "jpeg", "png"]:
