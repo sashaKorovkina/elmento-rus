@@ -397,6 +397,7 @@ if st.session_state.logged_in:
 
             # Get the original image size
             orig_width, orig_height = pil_image.size
+            st.write(orig_width, orig_height)
 
             # Calculate the ratio to resize the image while maintaining aspect ratio
             resize_ratio = target_height / orig_height
