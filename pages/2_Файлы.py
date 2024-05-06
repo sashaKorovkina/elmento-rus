@@ -404,6 +404,8 @@ if st.session_state.logged_in:
             new_width = int(orig_width * resize_ratio)
             new_height = int(orig_height * resize_ratio)
 
+            st.write(new_width, new_height)
+
             # Resize the image to match the target height
             resized_image = pil_image.resize((new_width, new_height), Image.ANTIALIAS)
 
