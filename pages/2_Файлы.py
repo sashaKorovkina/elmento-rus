@@ -388,15 +388,6 @@ if st.session_state.logged_in:
 
     for file in batch:
         with grid[col]:
-            # Row for the image
-            image_row = st.empty()
-
-            # Display the image in the image row
-            image_row.image(file['thumbnail_url'], caption=file['filename'])
-
-            # Row for the buttons
-            button_row = st.empty()
-
             # Place buttons in the button row
             file_extension = file['filename'].split(".")[-1].lower()
             if st.button("🗑️", key=f"delete_{file['url']}", type="secondary"):
@@ -413,10 +404,11 @@ if st.session_state.logged_in:
                 if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
                     get_summary(pdf_bytes, file['filename'])
 
-            # Aligning buttons with the image row
-            button_row.markdown(
-                f'<style>div.stButton > button:nth-of-type(2) {{ margin-left: 10px; }}</style>',
-                unsafe_allow_html=True)
+            # Row for the image
+            image_row = st.empty()
+
+            # Display the image in the image row
+            image_row.image(file['thumbnail_url'], caption=file['filename'])
 
         col = (col + 1) % row_size
 
