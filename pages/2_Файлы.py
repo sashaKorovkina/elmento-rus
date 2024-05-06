@@ -316,7 +316,7 @@ def delete_file(username, file_id):
 
 def display_file_with_thumbnail(file):
     if file.get('thumbnail_url'):
-        st.image(file['thumbnail_url'], caption=file['filename'], width=300)
+        st.image(file['thumbnail_url'], caption=file['filename'], width=200)
     else:
         st.markdown(f"[{file['filename']}]({file['url']})")
 
