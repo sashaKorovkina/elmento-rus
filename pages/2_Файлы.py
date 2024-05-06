@@ -382,16 +382,14 @@ if st.session_state.logged_in:
     batch = files[(page - 1) * batch_size: page * batch_size]
     st.write(batch)
 
-    grid = st.columns(row_size)
-    col = 0
-    for file in batch:
+    num_columns = len(batch) // row_size + (1 if len(batch) % row_size != 0 else 0)
+    grid = st.columns(num_columns)
+
+    for i, file in enumerate(batch):
+        row = i // row_size
+        col = i % row_size
         with grid[col]:
-            st.image(file['thumbnail_url'], caption=file['filename'])
-            # st.image(image['thumbnail_url'], caption='bike')
-            # st.checkbox("Incorrect", key=f'incorrect_{image}',
-            #             value=df.at[image, 'incorrect'],
-            #             on_change=update, args=(image, 'incorrect'))
-            col = (col + 1) % row_size
+            st.image(file['thumbnail_url'], caption=file['filename'], width=200)
 
     # if files:
     #     st.write(f'Все файлы:')
