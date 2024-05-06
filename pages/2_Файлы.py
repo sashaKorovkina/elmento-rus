@@ -366,25 +366,38 @@ if st.session_state.logged_in:
             uploaded_file = None  # Clear the uploaded file after handling
             st.experimental_rerun()
 
+    # Define the number of columns
+    num_columns = 3
+
+    # Calculate the width of each column
+    column_width = st._width / num_columns
+
     if files:
         st.write(f'Все файлы:')
         columns = st.columns(3)  # Create three columns
         for i, file in enumerate(files):
-            with columns[i % 3]:  # Distribute files evenly across columns
-                column_widths_pixels = [column.get_css_property("width")["value"] for column in columns]
-                st.write(f"Width of each column (pixels): {column_widths_pixels}")
-                # display_file_with_thumbnail(file)
-                if st.button("Удалить", key=f"delete_{file['url']}"):
-                    delete_file(username, file['doc_id'])  # Function to delete the file
-                file_extension = file['filename'].split(".")[-1].lower()
-                if file_extension in ["jpg", "jpeg", "png"]:
-                    image_bytes = get_img_blob(file)
-                    send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
-                elif file_extension == "pdf":
-                    pdf_bytes = get_img_blob(file)
-                    if st.button("Общение с ИИ", key=f"chat_{file['url']}"):
-                        pdf_parse_content(pdf_bytes)
-                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
-                        get_summary(pdf_bytes, file['filename'])
+            column_index = i % num_columns
+            if column_index == 0:
+                st.write('<div style="display:flex;">', unsafe_allow_html=True)
+            st.write('<div style="width:{}px">'.format(column_width), unsafe_allow_html=True)
+            display_file_with_thumbnail(file)
+            if st.button("Удалить", key=f"delete_{file['url']}"):
+                delete_file(username, file['doc_id'])  # Function to delete the file
+            file_extension = file['filename'].split(".")[-1].lower()
+            if file_extension in ["jpg", "jpeg", "png"]:
+                image_bytes = get_img_blob(file)
+                send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
+            elif file_extension == "pdf":
+                pdf_bytes = get_img_blob(file)
+                if st.button("Общение с ИИ", key=f"chat_{file['url']}"):
+                    pdf_parse_content(pdf_bytes)
+                if st.button("Получить сводку", key=f"chat_summary_{file['url']}"):
+                    get_summary(pdf_bytes, file['filename'])
+            st.write('</div>', unsafe_allow_html=True)
+            if column_index == num_columns - 1 or i == len(files) - 1:
+                st.write('</div>', unsafe_allow_html=True)
+
+    # Print out the width of each column
+    st.write(f"Width of each column (pixels): {column_width}")
 else:
     st.write('Пожалуйста, войдите в систему или зарегистрируйтесь, чтобы просмотреть эту страницу.')
