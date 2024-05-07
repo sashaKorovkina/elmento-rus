@@ -379,12 +379,17 @@ if st.session_state.logged_in:
     with controls[2]:
         page = st.selectbox("Page", range(1, num_batches + 1))
 
+    # Sort the entire list of files based on the 'timestamp' key
+    files.sort(key=lambda x: x['timestamp'])
+    # Now slice the sorted list for the current page
     batch = files[(page - 1) * batch_size: page * batch_size]
 
     grid = st.columns(row_size)
     col = 0
 
     max_heights = [0] * row_size
+
+
 
     for file in batch:
         with grid[col]:
@@ -412,10 +417,6 @@ if st.session_state.logged_in:
                         get_summary(pdf_bytes, file['filename'])
 
         col = (col + 1) % row_size
-
-
-    # if files:
-    #     st.write(f'Все файлы:')
 
 else:
     st.write('Пожалуйста, войдите в систему или зарегистрируйтесь, чтобы просмотреть эту страницу.')
