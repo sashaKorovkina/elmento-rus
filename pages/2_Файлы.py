@@ -98,7 +98,7 @@ def send_text_to_openai(text_content):
               "messages": [
                 {
                     "role": "user",
-                    "content": f"Summarise this text for me: ... {text_content}"
+                    "content": f"Having the output only in Russian language, summarise this text for me: ... {text_content}"
                 }
               ],
               "max_tokens": 100
