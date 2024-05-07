@@ -348,7 +348,7 @@ def get_img_blob(file):
     image_bytes = blob.download_as_bytes()
     return image_bytes
 
-st.title("Мои Документы")
+st.title("Мои документы")
 
 if st.session_state.logged_in:
     secrets = st.secrets['openai-api-key']
@@ -361,8 +361,8 @@ if st.session_state.logged_in:
     existing_file_names = [file['filename'] for file in files]  # List of existing file names
 
     with st.form("my-form", clear_on_submit=True):
-        uploaded_file = st.file_uploader("Загрузчик файлов")
-        submitted = st.form_submit_button("Загрузить")
+        uploaded_file = st.file_uploader("открыть Проводник")
+        submitted = st.form_submit_button("Загрузите ваши файлы")
 
         if uploaded_file and uploaded_file.name not in existing_file_names:
             file = upload_single_file(uploaded_file)
