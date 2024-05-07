@@ -12,3 +12,4 @@ faiss-cpu
 google-cloud-firestore
 firebase-admin
 pdf2image==1.17.0
+langdetect
