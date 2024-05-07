@@ -14,7 +14,7 @@ import contextlib
 import base64
 import pandas as pd
 from math import ceil
-
+from langdetect import detect
 
 # CHANGE FOR CLOUD DEPLOY!!!!
 pytesseract.pytesseract.tesseract_cmd = None
@@ -98,7 +98,7 @@ def send_text_to_openai(text_content):
               "messages": [
                 {
                     "role": "user",
-                    "content": f"Having the output only in Russian language, summarise this text for me: ... {text_content}"
+                    "content": f"Having the output only in grammatically correct Russian language, summarise this text for me: ... {text_content}"
                 }
               ],
               "max_tokens": 100
@@ -253,6 +253,8 @@ def pdf_parse_content(pdf_bytes):
         pdf_images.append(pdf_image)
 
         text = pytesseract.image_to_string(pdf_image)
+        lang = detect(text)
+        st.write(lang)
         pdf_texts.append(text)
 
     st.session_state['username'] = username
