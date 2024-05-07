@@ -401,6 +401,7 @@ if st.session_state.logged_in:
 
                 # Display the image in the image row
                 image_row.image(file['thumbnail_url'], caption=file['filename'])
+                st.write(file['uploaded_at'])
 
                 # Place buttons in the button row
                 file_extension = file['filename'].split(".")[-1].lower()
