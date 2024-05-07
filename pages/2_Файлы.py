@@ -380,7 +380,7 @@ if st.session_state.logged_in:
         page = st.selectbox("Page", range(1, num_batches + 1))
 
     # Sort the entire list of files based on the 'timestamp' key
-    files.sort(key=lambda x: x['uploaded_at'])
+    files.sort(key=lambda x: x['uploaded_at'], reverse=True)
     # Now slice the sorted list for the current page
     batch = files[(page - 1) * batch_size: page * batch_size]
 
@@ -388,7 +388,6 @@ if st.session_state.logged_in:
     col = 0
 
     max_heights = [0] * row_size
-
 
 
     for file in batch:
