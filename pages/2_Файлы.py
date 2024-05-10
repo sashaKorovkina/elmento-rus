@@ -376,7 +376,7 @@ if st.session_state.logged_in:
     with controls[0]:
         batch_size = st.select_slider("Batch size:", range(10, 110, 10))
     with controls[1]:
-        row_size = st.select_slider("Row size:", range(1, 6), value=5)
+        row_size = 3
     num_batches = ceil(len(files) / batch_size)
     with controls[2]:
         page = st.selectbox("Page", range(1, num_batches + 1))
