@@ -8,6 +8,7 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import datetime
+from langchain.prompts import PromptTemplate
 
 db = firestore.client()
 
@@ -25,6 +26,18 @@ def response_func(prompt, text):
     knowledge_base = FAISS.from_texts(chunks, embeddings)
     docs = knowledge_base.similarity_search(prompt)
     llm = OpenAI(openai_api_key = api_key)
+    prompt = PromptTemplate.from_template(
+        """
+        Use the following pieces of context to answer the question at the end. If you 
+        don't know the answer, just say that you don't know, don't try to make up an 
+        answer.
+
+        {context}
+
+        Question: {question}
+        Helpful Answer:
+        """
+    )
     reply_prompt = ("Always reply in Russian language. Here is your personality:\n"
                 "Твоя языковая личность:\n"
                 "1) Москвич, 22 года, студент магистратуры по программе 'Информационные технологии', выращен в семье со средним высоким достатком, в хороших условиях.\n"
@@ -36,7 +49,7 @@ def response_func(prompt, text):
                 "7) Речь - плавная, яркая, заинтересованная, активная, за исключением случаев, когда пользователь требует иного.\n"
                 "8) Обращайся на вы, если к тебе обращаются на вы. Если на ты - обращайся на вы, затем после нескольких сообщений можешь задать вопрос, как обращаться к пользователю. Однако, если задаются прямые вопросы - не нужно.")
 
-    chain = load_qa_chain(llm, chain_type="stuff", prompt=reply_prompt)
+    chain = load_qa_chain(llm, chain_type="stuff", prompt=prompt)
     with get_openai_callback() as cb:
         result = chain.run(input_documents=docs, question=prompt)
     return result
