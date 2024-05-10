@@ -128,7 +128,7 @@ def get_summary(pdf_bytes, file_name):
         pdf_image = Image.open(io.BytesIO(image_data))
         pdf_images.append(pdf_image)
 
-        text = pytesseract.image_to_string(pdf_image)
+        text = pytesseract.image_to_string(pdf_image, lang= 'rus')
         # lang = detect(text)
         # st.write(lang)
         pdf_texts.append(text)
@@ -254,7 +254,7 @@ def pdf_parse_content(pdf_bytes):
         pdf_image = Image.open(io.BytesIO(image_data))
         pdf_images.append(pdf_image)
 
-        text = pytesseract.image_to_string(pdf_image)
+        text = pytesseract.image_to_string(pdf_image, lang = 'rus')
         pdf_texts.append(text)
 
     st.session_state['username'] = username
