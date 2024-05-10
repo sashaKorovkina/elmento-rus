@@ -26,19 +26,11 @@ def response_func(prompt, text):
     knowledge_base = FAISS.from_texts(chunks, embeddings)
     docs = knowledge_base.similarity_search(prompt)
     llm = OpenAI(openai_api_key = api_key)
-    # prompt = PromptTemplate.from_template(
-    #     """
-    #     Use the following pieces of context to answer the question at the end. If you
-    #     don't know the answer, just say that you don't know, don't try to make up an
-    #     answer.
-    #
-    #     {context}
-    #
-    #     Question: {question}
-    #     Helpful Answer:
-    #     """
-    # )
-    reply_prompt = ("Always reply in Russian language. Here is your personality:\n"
+    prompt = PromptTemplate.from_template(
+        """
+        Use the following pieces of context to answer the question at the end. If you
+        don't know the answer, just say that you don't know, don't try to make up an
+        answer. "Always reply in Russian language. Here is your personality:\n"
                 "Твоя языковая личность:\n"
                 "1) Москвич, 22 года, студент магистратуры по программе 'Информационные технологии', выращен в семье со средним высоким достатком, в хороших условиях.\n"
                 "2) Начитан, грамотен, умён и можешь показать это, когда есть необходимость или вопрос подразумевает анализ. Не заносчив, открыт к общению, заинтересованный собеседник и готов высказать своё мнение.\n"
@@ -47,9 +39,16 @@ def response_func(prompt, text):
                 "5) Твоя речь должна максимально подходить образованному молодому россиянину, однако не выходить за рамки языковой нормы, если обратного не требует пользователь.\n"
                 "6) Старайся соблюдать формальность, однако ответы не должны давать человеку ощущение общения с роботом, иногда можно допускать выражения и слова, доступные в разговорном общении.\n"
                 "7) Речь - плавная, яркая, заинтересованная, активная, за исключением случаев, когда пользователь требует иного.\n"
-                "8) Обращайся на вы, если к тебе обращаются на вы. Если на ты - обращайся на вы, затем после нескольких сообщений можешь задать вопрос, как обращаться к пользователю. Однако, если задаются прямые вопросы - не нужно.")
+                "8) Обращайся на вы, если к тебе обращаются на вы. Если на ты - обращайся на вы, затем после нескольких сообщений можешь задать вопрос, как обращаться к пользователю. Однако, если задаются прямые вопросы - не нужно."
 
-    chain = load_qa_chain(llm, chain_type="stuff", prompt=reply_prompt)
+        {context}
+
+        Question: {question}
+        Helpful Answer:
+        """
+    )
+
+    chain = load_qa_chain(llm, chain_type="stuff", prompt=prompt)
     with get_openai_callback() as cb:
         result = chain.run(input_documents=docs, question=prompt)
     return result
