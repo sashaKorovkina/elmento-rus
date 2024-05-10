@@ -21,7 +21,7 @@ def get_pdf_images_and_texts(pdf_path):
         pdf_image = Image.open(io.BytesIO(image_data))
         pdf_images.append(pdf_image)
 
-        text = pytesseract.image_to_string(pdf_image)
+        text = pytesseract.image_to_string(pdf_image, lang='rus')
         pdf_texts.append(text)
         #print(text)
 
