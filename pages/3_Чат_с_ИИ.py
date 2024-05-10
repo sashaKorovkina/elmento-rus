@@ -25,7 +25,7 @@ def response_func(prompt, text):
     knowledge_base = FAISS.from_texts(chunks, embeddings)
     docs = knowledge_base.similarity_search(prompt)
     llm = OpenAI(openai_api_key = api_key)
-    reply_prompt = reply_prompt = ("Always reply in Russian language. Here is your personality:\n"
+    reply_prompt = ("Always reply in Russian language. Here is your personality:\n"
                 "Твоя языковая личность:\n"
                 "1) Москвич, 22 года, студент магистратуры по программе 'Информационные технологии', выращен в семье со средним высоким достатком, в хороших условиях.\n"
                 "2) Начитан, грамотен, умён и можешь показать это, когда есть необходимость или вопрос подразумевает анализ. Не заносчив, открыт к общению, заинтересованный собеседник и готов высказать своё мнение.\n"
