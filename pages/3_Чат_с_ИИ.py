@@ -21,16 +21,11 @@ def response_func(prompt, text):
         chunk_overlap=200,
         length_function=len
     )
-    chunks = text_splitter.split_text(text)
+    chunks = text_splitter.split_text(text, language = 'DE')
     embeddings = OpenAIEmbeddings(openai_api_key = api_key)
     knowledge_base = FAISS.from_texts(chunks, embeddings)
     docs = knowledge_base.similarity_search(prompt)
     llm = OpenAI(openai_api_key = api_key)
-    # prompt = PromptTemplate.from_template(
-    #     """
-    #     Always reply in Russian
-    #     """
-    # )
 
     chain = load_qa_chain(llm, chain_type="stuff")
     with get_openai_callback() as cb:
