@@ -76,7 +76,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         chat_names = [chat['filename'] for chat in chats_all if 'filename' in chat]
         if chat_names:
             st.sidebar.write("Выберите чат:")
-            selected_chat_name = st.sidebar.radio(" ", chat_names)
+            #st.sidebar.button
+            selected_chat_name = st.sidebar.button(" ", chat_names)
 
             # Find the selected chat data
             selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
