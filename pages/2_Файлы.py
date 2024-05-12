@@ -402,7 +402,13 @@ if st.session_state.logged_in:
 
                 # Display the image in the image row
                 image_row.image(file['thumbnail_url'], caption=file['filename'])
-                st.write(file['uploaded_at'])
+                # Create an empty slot
+                uploaded_at_slot = st.empty()
+
+                # Fill the slot with markdown representation of the text
+                uploaded_at_slot.markdown(file['uploaded_at'])
+                uploaded_at_slot.markdown(f"<span style='background-color: transparent;'>{file['uploaded_at']}</span>",
+                                          unsafe_allow_html=True)
 
                 # Place buttons in the button row
                 file_extension = file['filename'].split(".")[-1].lower()
