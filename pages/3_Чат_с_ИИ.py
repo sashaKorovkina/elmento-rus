@@ -82,36 +82,40 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             with st.sidebar.expander("Выберите чат:", expanded=True):
                 for chat_name in chat_names:
                     if st.button(chat_name):
-                        selected_chat_name = chat_name
+                        st.session_state.selected_chat_name = chat_name
 
-            # Find the selected chat data
-            if selected_chat_name:
+            if 'selected_chat_name' not in st.session_state:
+                st.session_state.selected_chat_name = None
+
+            if st.session_state.selected_chat_name:
+                selected_chat_name = st.session_state.selected_chat_name
                 selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
-            if selected_chat_data:
-                st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
-                display_messages(selected_chat_data['chat_id'], username)
 
-                prompt = st.text_input("Что вас интересует?")
-                if st.button("Отправить запрос"):
-                    if prompt:
-                        chat_id = selected_chat_data['chat_id']
-                        with st.spinner("Ответ на ваш запрос обрабатывается..."):
-                            st.write(f"Вы: {prompt}")
+                if selected_chat_data:
+                    st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
+                    display_messages(selected_chat_data['chat_id'], username)
 
-                            # AI response
-                            response = response_func(prompt, selected_chat_data['pdf_text'])
-                            st.write(f"ИИ: {response}")
+                    prompt = st.text_input("Что вас интересует?")
+                    if st.button("Отправить запрос"):
+                        if prompt:
+                            chat_id = selected_chat_data['chat_id']
+                            with st.spinner("Ответ на ваш запрос обрабатывается..."):
+                                st.write(f"Вы: {prompt}")
 
-                            # Save user message and AI response to database
-                            doc_ref = db.collection('users').document(username).collection('chats').document(
-                                chat_id).collection('messages').document()
-                            doc_ref.set({
-                                'message_user': prompt,
-                                'message_ai': response,
-                                'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat()
-                            })
-                    else:
-                        st.error("Пожалуйста, введите запрос перед отправкой.")
+                                # AI response
+                                response = response_func(prompt, selected_chat_data['pdf_text'])
+                                st.write(f"ИИ: {response}")
+
+                                # Save user message and AI response to database
+                                doc_ref = db.collection('users').document(username).collection('chats').document(
+                                    chat_id).collection('messages').document()
+                                doc_ref.set({
+                                    'message_user': prompt,
+                                    'message_ai': response,
+                                    'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat()
+                                })
+                        else:
+                            st.error("Пожалуйста, введите запрос перед отправкой.")
                 # # Chat input
                 # if prompt := st.chat_input("Что вас интересует?"):
                 #     chat_id = selected_chat_data['chat_id']
