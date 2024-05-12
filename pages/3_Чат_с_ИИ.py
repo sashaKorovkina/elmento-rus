@@ -78,6 +78,21 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
 
         if selected_chat_data:
+            standard_questions = [
+                "How can I assist you today?",
+                "What do you need help with?",
+                "Is there anything specific you'd like to know?",
+                "Need guidance on a particular topic?",
+                "Have a question in mind? Ask away!",
+                "Looking for information? Let me know what you're curious about!"
+            ]
+
+            # Display standard questions as buttons
+            st.write("Standard Questions:")
+            for question in standard_questions:
+                if st.button(question):
+                    st.write(f"You clicked: {question}")
+
             st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
             # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
             display_messages(selected_chat_data['chat_id'], username)
