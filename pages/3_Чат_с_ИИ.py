@@ -78,6 +78,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
 
         if selected_chat_data:
+            # Define standard questions
             standard_questions = [
                 "How can I assist you today?",
                 "What do you need help with?",
@@ -87,11 +88,11 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                 "Looking for information? Let me know what you're curious about!"
             ]
 
-            # Display standard questions as buttons
-            st.write("Standard Questions:")
+            # Display standard questions in sidebar
+            st.sidebar.title("Standard Questions:")
             for question in standard_questions:
-                if st.button(question):
-                    st.write(f"You clicked: {question}")
+                if st.sidebar.button(question):
+                    st.sidebar.write(f"You clicked: {question}")
 
             st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
             # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
