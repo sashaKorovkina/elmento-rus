@@ -1,9 +1,11 @@
 from openai import OpenAI
 import streamlit as st
 
-st.set_page_config(
-        page_title="My Page Title",
-)
+PAGE_CONFIG = {"page_title":"MyApp",
+               "layout":"centered",
+               "initial_sidebar_state":"auto"}
+
+st.set_page_config(**PAGE_CONFIG)
 
 # Display FAQs
 st.title("Часто задаваемые вопросы (FAQ):")
