@@ -393,7 +393,7 @@ if st.session_state.logged_in:
 
     for file in batch:
         with grid[col]:
-            with st.container(height = 600):
+            with st.container(width = "100%", height = 600):
                 if st.button("🗑️", key=f"delete_{file['url']}", type="secondary"):
                     delete_file(username, file['doc_id'])  # Function to delete the file
                 # Row for the image
