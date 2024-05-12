@@ -77,7 +77,7 @@ def send_image_to_openai(image_bytes, api_key, key):
                   ]
                 }
               ],
-              "max_tokens": 100
+              "max_tokens": 1000
             }
     if st.button("Get Explanation", key = key, use_container_width=True):
         try:
@@ -101,7 +101,7 @@ def send_text_to_openai(text_content):
                     "content": f"Having the output only in grammatically correct Russian language, summarise this text for me: ... {text_content}"
                 }
               ],
-              "max_tokens": 100
+              "max_tokens": 1000
             }
 
     try:
