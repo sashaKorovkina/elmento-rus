@@ -96,21 +96,21 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                     # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
                     display_messages(selected_chat_data['chat_id'], username)
 
-                    with st.sidebar.expander("Выберите тип вопроса:", expanded=True):
-                        question_types = [
-                            "Структура научной статьи по ГОСТ",
-                            "Структура курсовой работы по ГОСТ",
-                            "Структура дипломной работы по ГОСТ"
-                        ]
-                        selected_question_type = None
-                        for question_type in question_types:
-                            if st.sidebar.button(question_type, use_container_width=True):
-                                selected_question_type = question_type
+                    # with st.sidebar.expander("Выберите тип вопроса:", expanded=True):
+                    #     question_types = [
+                    #         "Структура научной статьи по ГОСТ",
+                    #         "Структура курсовой работы по ГОСТ",
+                    #         "Структура дипломной работы по ГОСТ"
+                    #     ]
+                    #     selected_question_type = None
+                    #     for question_type in question_types:
+                    #         if st.sidebar.button(question_type, use_container_width=True):
+                    #             selected_question_type = question_type
 
 
                     # Further processing based on the selected question type
-                    if selected_question_type:
-                        st.write(f"Вы выбрали тип вопроса: {selected_question_type}")
+                    # if selected_question_type:
+                    #     st.write(f"Вы выбрали тип вопроса: {selected_question_type}")
 
                     if prompt := st.chat_input("Что вас интересует?"):
                         chat_id = selected_chat_data['chat_id']
