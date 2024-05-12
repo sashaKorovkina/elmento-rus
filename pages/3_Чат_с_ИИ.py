@@ -75,9 +75,33 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         chats_all = [chat.to_dict() for chat in chats]
         chat_names = [chat['filename'] for chat in chats_all if 'filename' in chat]
         if chat_names:
+            st.markdown(
+                """
+                <style>
+                .st-expander-content {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: flex-start;
+                    align-items: center;
+                }
+                .st-expander-content > div[role="button"] {
+                    background-color: #f0f0f0;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    padding: 8px 12px;
+                    margin: 4px;
+                }
+                .st-expander-content > div[role="button"]:hover {
+                    background-color: #e0e0e0;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
             st.sidebar.write("Выберите чат:")
             #st.sidebar.button
-            selected_chat_name = st.sidebar.radio("Chats", chat_names)
+            selected_chat_name = selected_chat_name = st.selectbox("", chat_names)
 
             # Find the selected chat data
             selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
