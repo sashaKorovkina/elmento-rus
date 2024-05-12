@@ -108,7 +108,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                     # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
                     display_messages(selected_chat_data['chat_id'], username)
 
-                    prompt = selected_question_type
                     # Further processing based on the selected question type
                     if selected_question_type:
                         st.write(f"Вы выбрали тип вопроса: {selected_question_type}")
