@@ -94,6 +94,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                 for question in standard_questions:
                     if st.sidebar.button(question, use_container_width=True):
                         st.sidebar.write(f"You clicked: {question}")
+                        prompt = question
 
                 st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
                 # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
