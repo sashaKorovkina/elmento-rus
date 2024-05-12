@@ -84,17 +84,19 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                                               None)
                     if selected_chat_data:
                         st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
-                        display_messages(selected_chat_data['chat_id'], username)
-                        if prompt := st.chat_input("Что вас интересует?"):
-                            chat_id = selected_chat_data['chat_id']
-                            with st.chat_message("user"):
-                                st.markdown(prompt)
-                            # st.session_state.messages.append({"role": "user", "content": prompt})
 
-                            # AI response
-                            response = response_func(prompt, selected_chat_data['pdf_text'])
+                        # Create a placeholder for chat messages
+                        messages_placeholder = st.empty()
+                        display_messages(selected_chat_data['chat_id'], username, messages_placeholder)
+
+                        # Input prompt
+                        if prompt := st.text_input("Что вас интересует?"):
+                            chat_id = selected_chat_data['chat_id']
                             with st.spinner("Ответ на ваш запрос обрабатывается..."):
-                                st.write(response)
+                                response = response_func(prompt, selected_chat_data['pdf_text'])
+                                messages_placeholder.write(response)
+
+                                # Save user message and AI response to database
                                 doc_ref = db.collection('users').document(username).collection('chats').document(
                                     chat_id).collection('messages').document()
                                 doc_ref.set({
