@@ -77,7 +77,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         if chat_names:
             st.sidebar.write("Выберите чат:")
             #st.sidebar.button
-            selected_chat_name = st.sidebar.multiselect(" ", chat_names)
+            selected_chat_name = st.sidebar.radio(" ", chat_names)
 
             # Find the selected chat data
             selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
