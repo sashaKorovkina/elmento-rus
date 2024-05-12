@@ -87,6 +87,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             # Find the selected chat data
             if selected_chat_name:
                 selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
+                st.sidebar.write(selected_chat_data)
 
             if selected_chat_data:
                 st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
