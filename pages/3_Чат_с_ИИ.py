@@ -84,12 +84,9 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             if selected_chat_data:
                 # Define standard questions
                 standard_questions = [
-                    "How can I assist you today?",
-                    "What do you need help with?",
-                    "Is there anything specific you'd like to know?",
-                    "Need guidance on a particular topic?",
-                    "Have a question in mind? Ask away!",
-                    "Looking for information? Let me know what you're curious about!"
+                    "Структура курсовой работы по ГОСТ",
+                    "Структура дипломной работы по ГОСТ",
+                    "Структура научной статьи по ГОСТ",
                 ]
 
                 # Display standard questions in sidebar
