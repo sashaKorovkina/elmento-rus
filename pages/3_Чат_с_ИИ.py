@@ -101,6 +101,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                     for question_type in question_types:
                         if st.sidebar.button(question_type, use_container_width=True):
                             selected_question_type = question_type
+                            st.chat_input = selected_question_type
 
                 if selected_chat_data:
                     st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
