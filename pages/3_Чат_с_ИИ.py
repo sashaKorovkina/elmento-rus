@@ -85,7 +85,9 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                         selected_chat_name = chat_name
 
             # Find the selected chat data
-            selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
+            if selected_chat_name:
+                selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
+
             if selected_chat_data:
                 st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
                 # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
