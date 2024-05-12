@@ -365,7 +365,7 @@ if st.session_state.logged_in:
 
     with st.form("my-form", clear_on_submit=True):
         uploaded_file = st.file_uploader("")
-        submitted = st.form_submit_button("Загрузите ваши файлы")
+        submitted = st.form_submit_button("Добавить в галерею")
 
         if submitted and not uploaded_file:
             st.error("Пожалуйста, загрузите файл перед нажатием кнопки 'Загрузите ваши файлы'")
