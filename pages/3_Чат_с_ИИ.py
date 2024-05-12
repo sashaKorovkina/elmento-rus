@@ -77,7 +77,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         if chat_names:  # Assuming chat_names is a list of available chat names
             st.sidebar.write("Выберите чат:")
             for chat_name in chat_names:
-                if st.sidebar.button(chat_name):
+                if st.sidebar.button(chat_name, use_container_width=True):
                     selected_chat_name = chat_name
             selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
 
