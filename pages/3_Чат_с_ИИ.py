@@ -99,8 +99,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             )
 
             # Display the expander with chat names as buttons
-            with st.sidebar.expander("Выберите чат:", expanded=True):
-                selected_chat_name = st.selectbox("", chat_names)
+            with st.sidebar.expander("", expanded=True):
+                selected_chat_name = st.selectbox("Выберите чат:", chat_names)
 
             # Find the selected chat data
             selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
