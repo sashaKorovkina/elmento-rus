@@ -74,7 +74,9 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         chats = chats_ref.get()
         chats_all = [chat.to_dict() for chat in chats]
         chat_names = [chat['filename'] for chat in chats_all if 'filename' in chat]
-        selected_chat_name = st.sidebar.button("Выберите чат:", chat_names)
+        for chat_name in chat_names:
+            if st.sidebar.button(chat_name):
+                selected_chat_name = chat_name
         selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
 
         if selected_chat_data:
