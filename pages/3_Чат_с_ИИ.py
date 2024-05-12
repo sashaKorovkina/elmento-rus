@@ -79,28 +79,10 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             #st.sidebar.button
             #selected_chat_name = st.sidebar.selectbox("Выберите чат:", chat_names)
             # Custom CSS to style the expander as buttons
-            st.markdown(
-                """
-                <style>
-                .stExpander > .stButton > div[role="button"] {
-                    background-color: #f0f0f0;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    padding: 8px 12px;
-                    margin: 4px;
-                }
-                .stExpander > .stButton > div[role="button"]:hover {
-                    background-color: #e0e0e0;
-                }
-                </style>
-                """,
-                unsafe_allow_html=True,
-            )
-
-            # Display the expander with chat names as buttons
-            with st.sidebar.expander("", expanded=True):
-                selected_chat_name = st.selectbox("Выберите чат:", chat_names)
+            with st.sidebar.expander("Выберите чат:", expanded=True):
+                for chat_name in chat_names:
+                    if st.button(chat_name):
+                        selected_chat_name = chat_name
 
             # Find the selected chat data
             selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
