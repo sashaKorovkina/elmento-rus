@@ -81,7 +81,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             # Custom CSS to style the expander as buttons
             with st.sidebar.expander("Выберите чат:", expanded=True):
                 for chat_name in chat_names:
-                    if st.button(chat_name):
+                    if st.button(chat_name, use_container_width=True):
                         st.session_state.selected_chat_name = chat_name
 
             if 'selected_chat_name' not in st.session_state:
