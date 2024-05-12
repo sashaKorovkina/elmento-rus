@@ -74,6 +74,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         chats = chats_ref.get()
         chats_all = [chat.to_dict() for chat in chats]
         chat_names = [chat['filename'] for chat in chats_all if 'filename' in chat]
+        selected_chat_name = None  # Initialize selected_chat_name
         if chat_names:  # Assuming chat_names is a list of available chat names
             st.sidebar.write("Выберите чат:")
             for chat_name in chat_names:
@@ -98,24 +99,26 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             #         if st.sidebar.button(question, use_container_width=True):
             #             st.sidebar.write(f"You clicked: {question}")
 
-            st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
-            # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
-            display_messages(selected_chat_data['chat_id'], username)
-            if prompt := st.chat_input("Что вас интересует?"):
-                chat_id = selected_chat_data['chat_id']
-                with st.chat_message("user"):
-                    st.markdown(prompt)
-                #st.session_state.messages.append({"role": "user", "content": prompt})
-                response = response_func(prompt, selected_chat_data['pdf_text'])
-                with st.chat_message("assistant"):
-                    st.markdown(response)
-                doc_ref = db.collection('users').document(username).collection('chats').document(chat_id).collection(
-                    'messages').document()
-                doc_ref.set({
-                    'message_user': prompt,
-                    'message_ai' : response,
-                    'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat()
-                })
+            if selected_chat_name:
+                st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
+                # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
+                display_messages(selected_chat_data['chat_id'], username)
+                if prompt := st.chat_input("Что вас интересует?"):
+                    chat_id = selected_chat_data['chat_id']
+                    with st.chat_message("user"):
+                        st.markdown(prompt)
+                    # st.session_state.messages.append({"role": "user", "content": prompt})
+                    response = response_func(prompt, selected_chat_data['pdf_text'])
+                    with st.chat_message("assistant"):
+                        st.markdown(response)
+                    doc_ref = db.collection('users').document(username).collection('chats').document(
+                        chat_id).collection(
+                        'messages').document()
+                    doc_ref.set({
+                        'message_user': prompt,
+                        'message_ai': response,
+                        'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat()
+                    })
 
 else:
     st.write('Пожалуйста, войдите в систему или зарегистрируйтесь, чтобы просмотреть эту страницу.')
