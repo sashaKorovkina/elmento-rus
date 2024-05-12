@@ -95,6 +95,10 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                     st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
                     # st.write(f"The id in the selected file is: {selected_chat_data['chat_id']}")
                     display_messages(selected_chat_data['chat_id'], username)
+
+                    with st.sidebar.expander("Choose question type:", expanded=True):
+                        st.sidebar.write('I am some chosen doc type')
+
                     if prompt := st.chat_input("Что вас интересует?"):
                         chat_id = selected_chat_data['chat_id']
                         with st.chat_message("user"):
