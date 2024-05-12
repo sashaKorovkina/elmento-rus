@@ -107,6 +107,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                             if st.sidebar.button(question_type, use_container_width=True):
                                 selected_question_type = question_type
                                 st.sidebar.write(selected_question_type)
+                                prompt = selected_question_type
 
                     # Further processing based on the selected question type
                     if selected_question_type:
