@@ -100,4 +100,6 @@ if not st.session_state['signedout']:
             st.markdown('Пожалуйста, войдите в систему, используя вашу электронную почту и пароль.')
             st.balloons()
 
+if 'logged_in' in st.session_state and st.session_state.logged_in:
+    st.write('hola')
 
