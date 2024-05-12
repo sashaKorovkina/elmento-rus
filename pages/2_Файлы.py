@@ -363,7 +363,7 @@ if st.session_state.logged_in:
     existing_file_names = [file['filename'] for file in files]  # List of existing file names
 
     with st.form("my-form", clear_on_submit=True):
-        uploaded_file = st.file_uploader("открыть Проводник")
+        uploaded_file = st.file_uploader("")
         submitted = st.form_submit_button("Загрузите ваши файлы")
 
         if uploaded_file and uploaded_file.name not in existing_file_names:
