@@ -79,8 +79,10 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         for chat_name in chat_names:
             if st.sidebar.button(chat_name):
                 selected_chat_name = chat_name
+                st.write(selected_chat_name)
             # selected_chat_name = st.sidebar.radio("Выберите чат:", chat_names)
-            selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
+                selected_chat_data = next((chat for chat in chats_all if chat['filename'] == selected_chat_name), None)
+                st.write(selected_chat_data)
 
             if selected_chat_data:
                 st.write(f"Начало чат-сессии для: {selected_chat_data['filename']}")
