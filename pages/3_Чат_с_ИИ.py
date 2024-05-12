@@ -30,7 +30,7 @@ def response_func(prompt, text):
         """
         Use the following pieces of context to answer the question at the end. If you
         don't know the answer, just say that you don't know, don't try to make up an
-        answer. Always reply in Russian.\n"
+        answer. Always reply in Russian. If the answer is not in the document, print 'I don't know, you did not mention it'.\n"
 
         {context}
         """
