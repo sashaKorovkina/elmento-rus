@@ -251,31 +251,7 @@ def doc_page_to_image(docx_bytes):
     # Create a temporary directory
     temp_dir = tempfile.mkdtemp()
 
-    # Define the path for the temporary DOCX file
-    temp_docx_path = os.path.join(temp_dir, "temp.docx")
 
-    # Write the DOCX bytes to the temporary file
-    with open(temp_docx_path, "wb") as temp_docx_file:
-        temp_docx_file.write(docx_bytes)
-
-
-        # Convert the temporary docx file to a pdf file
-        temp_pdf_path = os.path.join(temp_dir, "temp.pdf")
-        convert(temp_docx_path, temp_pdf_path)
-
-        # Open the generated PDF and extract the first page
-        doc = fitz.open(temp_pdf_path)
-        page = doc.load_page(0)
-
-        # Render the first page to an image
-        pix = page.get_pixmap(matrix=fitz.Matrix(72 / 72, 72 / 72))
-
-        img_bytes = io.BytesIO()
-        img_bytes.write(pix.tobytes("png"))
-        img_bytes.seek(0)
-
-        doc.close()
-        return img_bytes
 
 def pdf_parse_content(pdf_bytes):
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
