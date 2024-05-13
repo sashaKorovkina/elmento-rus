@@ -532,7 +532,11 @@ if st.session_state.logged_in:
                         get_summary(pdf_bytes, file['filename'])
 
                 elif file_extension == "docx":
-                    st.write('Uploading a doc...')
+                    pdf_bytes = get_img_blob(file)
+                    if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
+                        pdf_parse_content(pdf_bytes)
+                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
+                        get_summary(pdf_bytes, file['filename'])
 
         col = (col + 1) % row_size
 
