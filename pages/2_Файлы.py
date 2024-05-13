@@ -459,7 +459,7 @@ if st.session_state.logged_in:
         if submitted and not uploaded_file:
             st.error("Пожалуйста, загрузите файл перед нажатием кнопки 'Загрузите ваши файлы'")
         elif uploaded_file and uploaded_file.name not in existing_file_names:
-            file = upload_single_file(uploaded_file, )
+            file = upload_single_file(uploaded_file, tmpdirname)
             uploaded_file = None  # Clear the uploaded file after handling
             st.experimental_rerun()
 
