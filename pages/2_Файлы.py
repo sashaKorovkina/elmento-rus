@@ -1,24 +1,24 @@
-import base64
 import streamlit as st
 import requests
 from PIL import Image
 import io
 import pytesseract
-import shutil
 from streamlit.components.v1 import html
 from firebase_admin import firestore, storage
-import uuid
 import datetime
 import fitz
 import contextlib
-import base64
-import pandas as pd
 from math import ceil
-from langdetect import detect
-import aspose.words as aw
-from pathlib import Path
 import os
+import base64
+import re
+import shutil
 import tempfile
+import uuid
+from datetime import datetime, timedelta
+from io import BytesIO
+from pathlib import Path
+from subprocess import PIPE, run
 
 # CHANGE FOR CLOUD DEPLOY!!!!
 pytesseract.pytesseract.tesseract_cmd = None
