@@ -411,9 +411,6 @@ def get_img_blob(file):
     image_bytes = blob.download_as_bytes()
     return image_bytes
 def make_tempdir() -> Path:
-    '''Make temp dir for each user session and return path to it
-    returns: Path to temp dir
-    '''
     if 'tempfiledir' not in st.session_state:
         tempfiledir = Path(tempfile.gettempdir())
         tempfiledir = tempfiledir.joinpath(f"{uuid.uuid4()}")   # make unique subdir
@@ -426,7 +423,6 @@ st.title("Мои документы")
 if st.session_state.logged_in:
     secrets = st.secrets['openai-api-key']
     api_key = secrets["OPEN_AI_KEY"]
-    tmpdirname = make_tempdir()
 
     #api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
     username = st.session_state.username

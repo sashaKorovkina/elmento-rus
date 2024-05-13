@@ -1,3 +1,7 @@
 tesseract-ocr
 tesseract-ocr-eng
 tesseract-ocr-rus
+default-jre-headless
+libreoffice-core-nogui
+libreoffice-writer-nogui
+libreoffice-java-common
