@@ -367,38 +367,36 @@ def convert_doc_to_pdf_native(doc_file: Path, output_dir: Path=Path("."), timeou
         exception = e
     return (output, exception)
 
-
 def upload_single_file(uploaded_file, tmpdirname):
-    try:
-        # Store the uploaded file in the temp directory
+    print('Uploading new file...')
+    thumbnail_stream = None
+    if uploaded_file.type.startswith('image/'):
+        thumbnail_stream = create_thumbnail(uploaded_file, uploaded_file.type.split('/')[-1])
+    elif uploaded_file.type.startswith('application/pdf'):
+        thumbnail_stream = pdf_page_to_image(uploaded_file.getvalue())
+    elif uploaded_file.type.startswith('application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
         tmpfile = store_file_in_tempdir(tmpdirname, uploaded_file)
-
         with st.spinner('Converting file...'):
             pdf_file, exception = convert_doc_to_pdf_native(doc_file=tmpfile, output_dir=tmpdirname)
-
         if exception is not None:
-            st.exception('Exception occurred during conversion.')
+            st.exception('Exception occured during conversion.')
             st.exception(exception)
             st.stop()
-
         elif pdf_file is None:
             st.error('Conversion failed. No PDF file was created.')
             st.stop()
-
         elif pdf_file.exists():
             st.success(f"Conversion successful: {pdf_file.name}")
+            thumbnail_stream = pdf_page_to_image(pdf_file.getvalue())
 
-            # Read the content of the PDF file into a BytesIO stream
-            with open(pdf_file, "rb") as f:
-                pdf_bytes = f.read()
-            pdf_stream = io.BytesIO(pdf_bytes)
+    upload_file(uploaded_file, thumbnail_stream)
+    if thumbnail_stream is not None:
+        with contextlib.closing(thumbnail_stream):
+            pass
 
-            thumbnail_stream = pdf_page_to_image(pdf_stream)
-            return thumbnail_stream
-
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
-        return None
+    # st.write(f'Current document is:')
+    file = get_last_file()
+    return file
 
 def get_img_blob(file):
     blob_path = file['blob']
