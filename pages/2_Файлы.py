@@ -250,7 +250,7 @@ def doc_page_to_image(docx_bytes):
     st.sidebar.write('converting docx to image')
     # Create a temporary directory
     temp_dir = tempfile.mkdtemp()
-
+    st.sidebar.write(temp_dir)
 
 
 def pdf_parse_content(pdf_bytes):
