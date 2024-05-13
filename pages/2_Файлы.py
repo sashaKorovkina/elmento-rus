@@ -341,16 +341,16 @@ def display_file_with_thumbnail(file):
     else:
         st.markdown(f"[{file['filename']}]({file['url']})")
 
-def store_file_in_tempdir(tmpdirname: Path, uploaded_file: BytesIO) -> Path:
-    # store file in temp dir
-    tmpfile = tmpdirname.joinpath(uploaded_file.name)
+def store_file_in_tempdir(tmpdirname, uploaded_file):
+    # Create a temporary file path
+    tmpfile = os.path.join(tmpdirname, uploaded_file.name)
     with open(tmpfile, 'wb') as f:
         f.write(uploaded_file.getbuffer())
     return tmpfile
 
-def convert_doc_to_pdf_native(doc_file: Path, output_dir: Path=Path("."), timeout: int=60):
+def convert_doc_to_pdf_native(doc_file, output_dir=".", timeout=60):
     """Converts a doc file to pdf using libreoffice without msoffice2pdf.
-    Calls libroeoffice (soffice) directly in headless mode.
+    Calls libreoffice (soffice) directly in headless mode.
     params: doc_file: Path to doc file
             output_dir: Path to output dir
             timeout: timeout for subprocess in seconds
@@ -362,12 +362,13 @@ def convert_doc_to_pdf_native(doc_file: Path, output_dir: Path=Path("."), timeou
     output = None
     try:
         process = run(['soffice', '--headless', '--convert-to',
-            'pdf:writer_pdf_Export', '--outdir', output_dir.resolve(), doc_file.resolve()],
+            'pdf:writer_pdf_Export', '--outdir', os.path.abspath(output_dir), os.path.abspath(doc_file)],
             stdout=PIPE, stderr=PIPE,
             timeout=timeout, check=True)
         stdout = process.stdout.decode("utf-8")
-        re_filename = re.search('-> (.*?) using filter', stdout)
-        output = Path(re_filename[1]).resolve()
+        re_filename = re.search(r'-> (.*?) using filter', stdout)
+        if re_filename:
+            output = os.path.abspath(re_filename[1])
     except Exception as e:
         exception = e
     return (output, exception)
