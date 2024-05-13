@@ -246,13 +246,17 @@ def pdf_page_to_image(pdf_stream):
     doc.close()
     return img_bytes
 
-def doc_page_to_image(docx_stream):
+def doc_page_to_image(docx_bytes):
     # Create a temporary directory
-    with tempfile.TemporaryDirectory() as temp_dir:
-        # Save the in-memory docx to a temporary file
-        temp_docx_path = os.path.join(temp_dir, "temp.docx")
-        with open(temp_docx_path, "wb") as temp_docx:
-            temp_docx.write(docx_stream.read())
+    temp_dir = tempfile.mkdtemp()
+
+    # Define the path for the temporary DOCX file
+    temp_docx_path = os.path.join(temp_dir, "temp.docx")
+
+    # Write the DOCX bytes to the temporary file
+    with open(temp_docx_path, "wb") as temp_docx_file:
+        temp_docx_file.write(docx_bytes)
+
 
         # Convert the temporary docx file to a pdf file
         temp_pdf_path = os.path.join(temp_dir, "temp.pdf")
