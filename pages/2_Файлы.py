@@ -1,7 +1,7 @@
 import base64
 import streamlit as st
 import requests
-from PIL import Image
+from PIL import Image, ImageDraw
 import io
 import pytesseract
 import shutil
@@ -15,7 +15,7 @@ import base64
 import pandas as pd
 from math import ceil
 from langdetect import detect
-# from docx import Document
+from docx import Document
 
 # CHANGE FOR CLOUD DEPLOY!!!!
 pytesseract.pytesseract.tesseract_cmd = None
@@ -243,6 +243,27 @@ def pdf_page_to_image(pdf_stream):
     doc.close()
     return img_bytes
 
+def docx_to_image(docx_bytes):
+    # Load the DOCX document from bytes
+    doc = Document(io.BytesIO(docx_bytes))
+
+    # Create an image in memory
+    img = Image.new("RGB", (800, 600), "white")
+    draw = ImageDraw.Draw(img)
+
+    # Write text content to the image
+    y_offset = 10
+    for paragraph in doc.paragraphs:
+        draw.text((10, y_offset), paragraph.text, fill="black")
+        y_offset += 20  # Adjust the y-offset for next paragraph
+
+    # Convert the image to bytes
+    img_bytes = io.BytesIO()
+    img.save(img_bytes, format="PNG")
+    img_bytes.seek(0)
+
+    return img_bytes
+
 
 def pdf_parse_content(pdf_bytes):
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
@@ -327,13 +348,18 @@ def display_file_with_thumbnail(file):
     else:
         st.markdown(f"[{file['filename']}]({file['url']})")
 
+
 def upload_single_file(uploaded_file):
     print('Uploading new file...')
     thumbnail_stream = None
     if uploaded_file.type.startswith('image/'):
         thumbnail_stream = create_thumbnail(uploaded_file, uploaded_file.type.split('/')[-1])
+
     elif uploaded_file.type.startswith('application/pdf'):
         thumbnail_stream = pdf_page_to_image(uploaded_file.getvalue())
+
+    elif uploaded_file.type.startswith('application/msword'):
+        thumbnail_stream = docx_to_image(uploaded_file.getvalue())
 
     upload_file(uploaded_file, thumbnail_stream)
     if thumbnail_stream is not None:
@@ -421,19 +447,12 @@ if st.session_state.logged_in:
                     image_bytes = get_img_blob(file)
                     send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}") # describe image
 
-                elif file_extension == "pdf":
+                elif file_extension in ["pdf", "docx"]:
                     pdf_bytes = get_img_blob(file)
                     if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True): #talk to ai
                         pdf_parse_content(pdf_bytes)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True): #get summary
                         get_summary(pdf_bytes, file['filename'])
-
-                elif file_extension == "docx":
-                    bytes = get_img_blob(file)
-                    if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True): #talk to ai
-                        pdf_parse_content(bytes)
-                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True): #get summary
-                        get_summary(bytes, file['filename'])
 
 
 
