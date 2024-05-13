@@ -404,7 +404,7 @@ def upload_single_file(uploaded_file, tmpdirname):
                 with open(pdf_file, "rb") as f:
                     pdf_bytes = f.read()
                 pdf_stream = io.BytesIO(pdf_bytes)
-                print(pdf_stream)
+                thumbnail_stream = pdf_page_to_image(pdf_stream)
 
                 # thumbnail_stream = pdf_page_to_image(pdf_stream)
                 # return thumbnail_stream
