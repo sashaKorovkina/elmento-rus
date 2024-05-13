@@ -247,12 +247,18 @@ def pdf_page_to_image(pdf_stream):
     doc.close()
     return img_bytes
 
-def doc_page_to_image(pdf_bytes):
-    pix = page.get_pixmap(matrix=fitz.Matrix(72 / 72, 72 / 72))
-    pdf_bytes.write(pix.tobytes("png"))
-    pdf_bytes.seek(0)
-    return pdf_bytes
+def doc_page_to_image(pdf_stream):
+    doc = fitz.open("pdf", pdf_stream)
+    page = doc.load_page(0)
 
+    pix = page.get_pixmap(matrix=fitz.Matrix(72 / 72, 72 / 72))
+
+    img_bytes = io.BytesIO()
+    img_bytes.write(pix.tobytes("png"))
+    img_bytes.seek(0)
+
+    doc.close()
+    return img_bytes
 def pdf_parse_content(pdf_bytes):
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
