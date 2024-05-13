@@ -15,6 +15,7 @@ import base64
 import pandas as pd
 from math import ceil
 from langdetect import detect
+# from docx import Document
 
 # CHANGE FOR CLOUD DEPLOY!!!!
 pytesseract.pytesseract.tesseract_cmd = None
@@ -168,7 +169,6 @@ def nav_page(page_name, timeout_secs=3):
     html(nav_script)
 
 
-
 def get_existing_files():
     docs_ref = db.collection('users').document(username).collection('documents')
     docs = docs_ref.get()
@@ -243,6 +243,7 @@ def pdf_page_to_image(pdf_stream):
     doc.close()
     return img_bytes
 
+
 def pdf_parse_content(pdf_bytes):
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
@@ -255,7 +256,7 @@ def pdf_parse_content(pdf_bytes):
         pdf_image = Image.open(io.BytesIO(image_data))
         pdf_images.append(pdf_image)
 
-        text = pytesseract.image_to_string(pdf_image, lang = 'rus')
+        text = pytesseract.image_to_string(pdf_image, lang='rus')
         pdf_texts.append(text)
 
     st.session_state['username'] = username
@@ -351,13 +352,14 @@ def get_img_blob(file):
     image_bytes = blob.download_as_bytes()
     return image_bytes
 
+
 st.title("Мои документы")
 
 if st.session_state.logged_in:
     secrets = st.secrets['openai-api-key']
     api_key = secrets["OPEN_AI_KEY"]
 
-    #api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
+    # api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
     username = st.session_state.username
 
     files = get_existing_files()
@@ -373,7 +375,6 @@ if st.session_state.logged_in:
             file = upload_single_file(uploaded_file)
             uploaded_file = None  # Clear the uploaded file after handling
             st.experimental_rerun()
-
 
     controls = st.columns(2)
     with controls[0]:
@@ -393,38 +394,48 @@ if st.session_state.logged_in:
 
     max_heights = [0] * row_size
 
-
     for file in batch:
         with grid[col]:
-            with st.container(height = 800):
+            with st.container(height=800):
                 if st.button("🗑️", key=f"delete_{file['url']}", type="secondary"):
                     delete_file(username, file['doc_id'])  # Function to delete the file
+
                 # Row for the image
                 image_row = st.empty()
-
                 # Display the image in the image row
                 image_row.image(file['thumbnail_url'], caption=file['filename'])
                 # Create an empty slot
                 uploaded_at_slot = st.empty()
-
                 # Fill the slot with markdown representation of the text
                 uploaded_at_slot.markdown(file['uploaded_at'])
                 uploaded_at_slot.markdown(f"<span style='background-color: transparent;'>{file['uploaded_at']}</span>",
                                           unsafe_allow_html=True)
-
                 # Place buttons in the button row
                 file_extension = file['filename'].split(".")[-1].lower()
 
+                img_blob_output = get_img_blob(file)
+                st.write("what is this get_img_blob???")
+                st.write(img_blob_output)
+
                 if file_extension in ["jpg", "jpeg", "png"]:
                     image_bytes = get_img_blob(file)
-                    send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}")
+                    send_image_to_openai(image_bytes, api_key, key=f"chat_{file['url']}") # describe image
 
                 elif file_extension == "pdf":
                     pdf_bytes = get_img_blob(file)
-                    if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
+                    if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True): #talk to ai
                         pdf_parse_content(pdf_bytes)
-                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
+                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True): #get summary
                         get_summary(pdf_bytes, file['filename'])
+
+                elif file_extension == "docx":
+                    bytes = get_img_blob(file)
+                    if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True): #talk to ai
+                        pdf_parse_content(bytes)
+                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True): #get summary
+                        get_summary(bytes, file['filename'])
+
+
 
         col = (col + 1) % row_size
 
