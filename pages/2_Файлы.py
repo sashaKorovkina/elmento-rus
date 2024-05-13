@@ -381,19 +381,36 @@ def upload_single_file(uploaded_file, tmpdirname):
     elif uploaded_file.type.startswith('application/pdf'):
         thumbnail_stream = pdf_page_to_image(uploaded_file.getvalue())
     elif uploaded_file.type.startswith('application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
-        tmpfile = store_file_in_tempdir(tmpdirname, uploaded_file)
-        with st.spinner('Converting file...'):
-            pdf_file, exception = convert_doc_to_pdf_native(doc_file=tmpfile, output_dir=tmpdirname)
-        if exception is not None:
-            st.exception('Exception occured during conversion.')
-            st.exception(exception)
-            st.stop()
-        elif pdf_file is None:
-            st.error('Conversion failed. No PDF file was created.')
-            st.stop()
-        elif pdf_file.exists():
-            st.success(f"Conversion successful: {pdf_file.name}")
-            thumbnail_stream = pdf_page_to_image(pdf_file.getvalue())
+        try:
+            # Store the uploaded file in the temp directory
+            tmpfile = store_file_in_tempdir(tmpdirname, uploaded_file)
+
+            with st.spinner('Converting file...'):
+                pdf_file, exception = convert_doc_to_pdf_native(doc_file=tmpfile, output_dir=tmpdirname)
+
+            if exception is not None:
+                st.exception('Exception occurred during conversion.')
+                st.exception(exception)
+                st.stop()
+
+            elif pdf_file is None:
+                st.error('Conversion failed. No PDF file was created.')
+                st.stop()
+
+            elif os.path.exists(pdf_file):
+                st.success(f"Conversion successful: {os.path.basename(pdf_file)}")
+
+                # Read the content of the PDF file into a BytesIO stream
+                with open(pdf_file, "rb") as f:
+                    pdf_bytes = f.read()
+                pdf_stream = io.BytesIO(pdf_bytes)
+
+                thumbnail_stream = pdf_page_to_image(pdf_stream)
+                return thumbnail_stream
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+            return None
 
     upload_file(uploaded_file, thumbnail_stream)
     if thumbnail_stream is not None:
