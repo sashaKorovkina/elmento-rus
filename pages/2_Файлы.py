@@ -15,11 +15,12 @@ import re
 import shutil
 import tempfile
 import uuid
-from datetime import datetime, timedelta
 from io import BytesIO
 from subprocess import PIPE, run
+from datetime import datetime, timedelta
 
 # CHANGE FOR CLOUD DEPLOY!!!!
+
 pytesseract.pytesseract.tesseract_cmd = None
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Users\sasha\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
 
@@ -405,9 +406,6 @@ def upload_single_file(uploaded_file, tmpdirname):
                     pdf_bytes = f.read()
                 pdf_stream = io.BytesIO(pdf_bytes)
                 thumbnail_stream = pdf_page_to_image(pdf_stream)
-
-                # thumbnail_stream = pdf_page_to_image(pdf_stream)
-                # return thumbnail_stream
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
