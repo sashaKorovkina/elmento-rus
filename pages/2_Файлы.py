@@ -17,7 +17,6 @@ import tempfile
 import uuid
 from datetime import datetime, timedelta
 from io import BytesIO
-from pathlib import Path
 from subprocess import PIPE, run
 
 # CHANGE FOR CLOUD DEPLOY!!!!
@@ -412,9 +411,9 @@ def get_img_blob(file):
     image_bytes = blob.download_as_bytes()
     return image_bytes
 
-def make_tempdir() -> Path:
+def make_tempdir():
     if 'tempfiledir' not in st.session_state:
-        tempfiledir = Path(tempfile.gettempdir())
+        tempfiledir = tempfile.gettempdir()
         tempfiledir = tempfiledir.joinpath(f"{uuid.uuid4()}")   # make unique subdir
         tempfiledir.mkdir(parents=True, exist_ok=True)  # make dir if not exists
         st.session_state['tempfiledir'] = tempfiledir
