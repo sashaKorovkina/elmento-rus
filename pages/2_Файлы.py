@@ -334,7 +334,7 @@ def upload_single_file(uploaded_file):
     elif uploaded_file.type.startswith('application/pdf'):
         thumbnail_stream = pdf_page_to_image(uploaded_file.getvalue())
     elif uploaded_file.type.startswith('application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
-        thumbnail_stream = create_thumbnail(uploaded_file, uploaded_file.type.split('/')[-1])
+        #thumbnail_stream = create_thumbnail(uploaded_file, uploaded_file.type.split('/')[-1])
         st.write('This is a doc file')
 
     upload_file(uploaded_file, thumbnail_stream)
