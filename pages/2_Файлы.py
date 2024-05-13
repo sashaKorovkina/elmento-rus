@@ -247,6 +247,7 @@ def pdf_page_to_image(pdf_stream):
     return img_bytes
 
 def doc_page_to_image(docx_bytes):
+    st.sidebar.write('converting docx to image')
     # Create a temporary directory
     temp_dir = tempfile.mkdtemp()
 
