@@ -15,6 +15,8 @@ import base64
 import pandas as pd
 from math import ceil
 from langdetect import detect
+import docx2pdf
+import tempfile
 
 # CHANGE FOR CLOUD DEPLOY!!!!
 pytesseract.pytesseract.tesseract_cmd = None
@@ -243,6 +245,32 @@ def pdf_page_to_image(pdf_stream):
     doc.close()
     return img_bytes
 
+def doc_page_to_image(docx_stream):
+    # Create a temporary directory
+    with tempfile.TemporaryDirectory() as temp_dir:
+        # Save the in-memory docx to a temporary file
+        temp_docx_path = os.path.join(temp_dir, "temp.docx")
+        with open(temp_docx_path, "wb") as temp_docx:
+            temp_docx.write(docx_stream.getbuffer())
+
+        # Convert the temporary docx file to a pdf file
+        temp_pdf_path = os.path.join(temp_dir, "temp.pdf")
+        convert(temp_docx_path, temp_pdf_path)
+
+        # Open the generated PDF and extract the first page
+        doc = fitz.open(temp_pdf_path)
+        page = doc.load_page(0)
+
+        # Render the first page to an image
+        pix = page.get_pixmap(matrix=fitz.Matrix(72 / 72, 72 / 72))
+
+        img_bytes = io.BytesIO()
+        img_bytes.write(pix.tobytes("png"))
+        img_bytes.seek(0)
+
+        doc.close()
+        return img_bytes
+
 def pdf_parse_content(pdf_bytes):
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
@@ -335,7 +363,7 @@ def upload_single_file(uploaded_file):
         thumbnail_stream = pdf_page_to_image(uploaded_file.getvalue())
     elif uploaded_file.type.startswith('application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
         st.write(uploaded_file.getvalue())
-        # thumbnail_stream = pdf_page_to_image(uploaded_file.getvalue())
+        thumbnail_stream = doc_page_to_image(uploaded_file.getvalue())
         # st.write('This is a doc file')
 
     upload_file(uploaded_file, thumbnail_stream)
