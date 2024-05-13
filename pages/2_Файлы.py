@@ -342,11 +342,6 @@ def display_file_with_thumbnail(file):
         st.markdown(f"[{file['filename']}]({file['url']})")
 
 def store_file_in_tempdir(tmpdirname: Path, uploaded_file: BytesIO) -> Path:
-    '''Store file in temp dir and return path to it
-    params: tmpdirname: Path to temp dir
-            uploaded_file: BytesIO object
-    returns: Path to stored file
-    '''
     # store file in temp dir
     tmpfile = tmpdirname.joinpath(uploaded_file.name)
     with open(tmpfile, 'wb') as f:
@@ -388,11 +383,16 @@ def upload_single_file(uploaded_file):
         tmpfile = store_file_in_tempdir(tmpdirname, uploaded_file)
         with st.spinner('Converting file...'):
             pdf_file, exception = convert_doc_to_pdf_native(doc_file=tmpfile, output_dir=tmpdirname)
-        if pdf_file.exists():
-            st.sidebar.success(f"Conversion successful: {pdf_file.name}")
+        if exception is not None:
+            st.exception('Exception occured during conversion.')
+            st.exception(exception)
+            st.stop()
+        elif pdf_file is None:
+            st.error('Conversion failed. No PDF file was created.')
+            st.stop()
+        elif pdf_file.exists():
+            st.success(f"Conversion successful: {pdf_file.name}")
             #pdf_bytes = get_bytes_from_file(pdf_file)
-        # thumbnail_stream = doc_page_to_image(uploaded_file.getvalue())
-        # st.write('This is a doc file')
 
     upload_file(uploaded_file, thumbnail_stream)
     if thumbnail_stream is not None:
