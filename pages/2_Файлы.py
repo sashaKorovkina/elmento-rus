@@ -392,7 +392,7 @@ def upload_single_file(uploaded_file, tmpdirname):
             st.stop()
         elif pdf_file.exists():
             st.success(f"Conversion successful: {pdf_file.name}")
-            #pdf_bytes = get_bytes_from_file(pdf_file)
+            thumbnail_stream = pdf_page_to_image(pdf_file.getvalue())
 
     upload_file(uploaded_file, thumbnail_stream)
     if thumbnail_stream is not None:
