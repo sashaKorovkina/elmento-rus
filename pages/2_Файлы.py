@@ -372,7 +372,7 @@ def convert_doc_to_pdf_native(doc_file: Path, output_dir: Path=Path("."), timeou
         exception = e
     return (output, exception)
 
-def upload_single_file(uploaded_file):
+def upload_single_file(uploaded_file, tmpdirname):
     print('Uploading new file...')
     thumbnail_stream = None
     if uploaded_file.type.startswith('image/'):
@@ -410,6 +410,7 @@ def get_img_blob(file):
     blob = bucket.blob(blob_path)
     image_bytes = blob.download_as_bytes()
     return image_bytes
+
 def make_tempdir() -> Path:
     if 'tempfiledir' not in st.session_state:
         tempfiledir = Path(tempfile.gettempdir())
@@ -418,11 +419,32 @@ def make_tempdir() -> Path:
         st.session_state['tempfiledir'] = tempfiledir
     return st.session_state['tempfiledir']
 
+@st.cache_resource(ttl=60*60*24)
+def cleanup_tempdir() -> None:
+    '''Cleanup temp dir for all user sessions.
+    Filters the temp dir for uuid4 subdirs.
+    Deletes them if they exist and are older than 1 day.
+    '''
+    deleteTime = datetime.now() - timedelta(days=1)
+    # compile regex for uuid4
+    uuid4_regex = r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+    uuid4_regex = re.compile(uuid4_regex)
+    tempfiledir = Path(tempfile.gettempdir())
+    if tempfiledir.exists():
+        subdirs = [x for x in tempfiledir.iterdir() if x.is_dir()]
+        subdirs_match = [x for x in subdirs if uuid4_regex.match(x.name)]
+        for subdir in subdirs_match:
+            itemTime = datetime.fromtimestamp(subdir.stat().st_mtime)
+            if itemTime < deleteTime:
+                shutil.rmtree(subdir)
+
 st.title("Мои документы")
 
 if st.session_state.logged_in:
     secrets = st.secrets['openai-api-key']
     api_key = secrets["OPEN_AI_KEY"]
+    cleanup_tempdir()  # cleanup temp dir from previous user sessions
+    tmpdirname = make_tempdir()  # make temp dir for each user session
 
     #api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
     username = st.session_state.username
@@ -437,7 +459,7 @@ if st.session_state.logged_in:
         if submitted and not uploaded_file:
             st.error("Пожалуйста, загрузите файл перед нажатием кнопки 'Загрузите ваши файлы'")
         elif uploaded_file and uploaded_file.name not in existing_file_names:
-            file = upload_single_file(uploaded_file)
+            file = upload_single_file(uploaded_file, )
             uploaded_file = None  # Clear the uploaded file after handling
             st.experimental_rerun()
 
