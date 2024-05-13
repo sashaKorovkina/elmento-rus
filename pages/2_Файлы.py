@@ -426,6 +426,9 @@ if st.session_state.logged_in:
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
                         get_summary(pdf_bytes, file['filename'])
 
+                elif file_extension == "docx":
+                    st.write('Uploading a doc...')
+
         col = (col + 1) % row_size
 
 else:
