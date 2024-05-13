@@ -15,7 +15,8 @@ import base64
 import pandas as pd
 from math import ceil
 from langdetect import detect
-from docx2pdf import convert
+import aspose.words as aw
+from pathlib import Path
 import os
 import tempfile
 
@@ -340,6 +341,42 @@ def display_file_with_thumbnail(file):
     else:
         st.markdown(f"[{file['filename']}]({file['url']})")
 
+def store_file_in_tempdir(tmpdirname: Path, uploaded_file: BytesIO) -> Path:
+    '''Store file in temp dir and return path to it
+    params: tmpdirname: Path to temp dir
+            uploaded_file: BytesIO object
+    returns: Path to stored file
+    '''
+    # store file in temp dir
+    tmpfile = tmpdirname.joinpath(uploaded_file.name)
+    with open(tmpfile, 'wb') as f:
+        f.write(uploaded_file.getbuffer())
+    return tmpfile
+
+def convert_doc_to_pdf_native(doc_file: Path, output_dir: Path=Path("."), timeout: int=60):
+    """Converts a doc file to pdf using libreoffice without msoffice2pdf.
+    Calls libroeoffice (soffice) directly in headless mode.
+    params: doc_file: Path to doc file
+            output_dir: Path to output dir
+            timeout: timeout for subprocess in seconds
+    returns: (output, exception)
+            output: Path to converted file
+            exception: Exception if conversion failed
+    """
+    exception = None
+    output = None
+    try:
+        process = run(['soffice', '--headless', '--convert-to',
+            'pdf:writer_pdf_Export', '--outdir', output_dir.resolve(), doc_file.resolve()],
+            stdout=PIPE, stderr=PIPE,
+            timeout=timeout, check=True)
+        stdout = process.stdout.decode("utf-8")
+        re_filename = re.search('-> (.*?) using filter', stdout)
+        output = Path(re_filename[1]).resolve()
+    except Exception as e:
+        exception = e
+    return (output, exception)
+
 def upload_single_file(uploaded_file):
     print('Uploading new file...')
     thumbnail_stream = None
@@ -348,7 +385,13 @@ def upload_single_file(uploaded_file):
     elif uploaded_file.type.startswith('application/pdf'):
         thumbnail_stream = pdf_page_to_image(uploaded_file.getvalue())
     elif uploaded_file.type.startswith('application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
-        thumbnail_stream = doc_page_to_image(uploaded_file.getvalue())
+        tmpfile = store_file_in_tempdir(tmpdirname, uploaded_file)
+        with st.spinner('Converting file...'):
+            pdf_file, exception = convert_doc_to_pdf_native(doc_file=tmpfile, output_dir=tmpdirname)
+        if pdf_file.exists():
+            st.sidebar.success(f"Conversion successful: {pdf_file.name}")
+            #pdf_bytes = get_bytes_from_file(pdf_file)
+        # thumbnail_stream = doc_page_to_image(uploaded_file.getvalue())
         # st.write('This is a doc file')
 
     upload_file(uploaded_file, thumbnail_stream)
@@ -367,12 +410,23 @@ def get_img_blob(file):
     blob = bucket.blob(blob_path)
     image_bytes = blob.download_as_bytes()
     return image_bytes
+def make_tempdir() -> Path:
+    '''Make temp dir for each user session and return path to it
+    returns: Path to temp dir
+    '''
+    if 'tempfiledir' not in st.session_state:
+        tempfiledir = Path(tempfile.gettempdir())
+        tempfiledir = tempfiledir.joinpath(f"{uuid.uuid4()}")   # make unique subdir
+        tempfiledir.mkdir(parents=True, exist_ok=True)  # make dir if not exists
+        st.session_state['tempfiledir'] = tempfiledir
+    return st.session_state['tempfiledir']
 
 st.title("Мои документы")
 
 if st.session_state.logged_in:
     secrets = st.secrets['openai-api-key']
     api_key = secrets["OPEN_AI_KEY"]
+    tmpdirname = make_tempdir()
 
     #api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
     username = st.session_state.username
