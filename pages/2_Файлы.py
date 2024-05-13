@@ -252,7 +252,7 @@ def doc_page_to_image(docx_stream):
         # Save the in-memory docx to a temporary file
         temp_docx_path = os.path.join(temp_dir, "temp.docx")
         with open(temp_docx_path, "wb") as temp_docx:
-            temp_docx.write(docx_stream.getbuffer())
+            temp_docx.write(docx_stream.read())
 
         # Convert the temporary docx file to a pdf file
         temp_pdf_path = os.path.join(temp_dir, "temp.pdf")
@@ -363,7 +363,6 @@ def upload_single_file(uploaded_file):
     elif uploaded_file.type.startswith('application/pdf'):
         thumbnail_stream = pdf_page_to_image(uploaded_file.getvalue())
     elif uploaded_file.type.startswith('application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
-        st.write(uploaded_file.getvalue())
         thumbnail_stream = doc_page_to_image(uploaded_file.getvalue())
         # st.write('This is a doc file')
 
