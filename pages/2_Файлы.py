@@ -15,7 +15,8 @@ import base64
 import pandas as pd
 from math import ceil
 from langdetect import detect
-import docx2pdf
+from docx2pdf import convert
+import os
 import tempfile
 
 # CHANGE FOR CLOUD DEPLOY!!!!
