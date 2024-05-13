@@ -246,11 +246,15 @@ def pdf_page_to_image(pdf_stream):
     doc.close()
     return img_bytes
 
-def doc_page_to_image(docx_bytes):
+def doc_page_to_image(docx_stream):
     st.sidebar.write('converting docx to image')
     # Create a temporary directory
-    temp_dir = tempfile.mkdtemp()
-    st.sidebar.write(temp_dir)
+    with tempfile.TemporaryDirectory() as temp_dir:
+        # Save the in-memory docx to a temporary file
+        temp_docx_path = os.path.join(temp_dir, "temp.docx")
+        with open(temp_docx_path, "wb") as temp_docx:
+            temp_docx.write(docx_stream.read())
+            st.sidebar.write(temp_docx_path)
 
 
 def pdf_parse_content(pdf_bytes):
