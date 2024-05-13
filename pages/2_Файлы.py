@@ -15,8 +15,7 @@ import base64
 import pandas as pd
 from math import ceil
 from langdetect import detect
-from docx import Document
-
+from docx2pdf import convert
 # CHANGE FOR CLOUD DEPLOY!!!!
 pytesseract.pytesseract.tesseract_cmd = None
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Users\sasha\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
@@ -244,22 +243,19 @@ def pdf_page_to_image(pdf_stream):
     return img_bytes
 
 def docx_to_image(docx_bytes):
-    # Load the DOCX document from bytes
-    doc = Document(io.BytesIO(docx_bytes))
-
+    pdf_bytes = io.BytesIO()
+    convert(io.BytesIO(docx_bytes), pdf_bytes)
+    pdf_bytes.seek(0)
     # Create an image in memory
     img = Image.new("RGB", (800, 600), "white")
     draw = ImageDraw.Draw(img)
 
-    # Write text content to the image
-    y_offset = 10
-    for paragraph in doc.paragraphs:
-        draw.text((10, y_offset), paragraph.text, fill="black")
-        y_offset += 20  # Adjust the y-offset for next paragraph
+    # Convert PDF to image
+    images = pdf_page_to_image(pdf_bytes.read())
 
-    # Convert the image to bytes
+    # Save the first image as bytes
     img_bytes = io.BytesIO()
-    img.save(img_bytes, format="PNG")
+    images[0].save(img_bytes, format='PNG')
     img_bytes.seek(0)
 
     return img_bytes
