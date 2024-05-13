@@ -390,6 +390,7 @@ def upload_single_file(uploaded_file, tmpdirname):
             with open(pdf_file, "rb") as f:
                 file_bytes = f.read()
                 st.write(file_bytes)
+                thumbnail_stream = doc_page_to_image(uploaded_file)
 
     upload_file(uploaded_file, thumbnail_stream)
     if thumbnail_stream is not None:
