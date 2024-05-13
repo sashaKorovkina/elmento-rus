@@ -405,8 +405,8 @@ def upload_single_file(uploaded_file, tmpdirname):
                     pdf_bytes = f.read()
                 pdf_stream = io.BytesIO(pdf_bytes)
 
-                thumbnail_stream = pdf_page_to_image(pdf_stream)
-                return thumbnail_stream
+                # thumbnail_stream = pdf_page_to_image(pdf_stream)
+                # return thumbnail_stream
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
