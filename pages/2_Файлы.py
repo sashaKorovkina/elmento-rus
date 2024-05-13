@@ -245,7 +245,7 @@ def pdf_page_to_image(pdf_stream):
 
 def docx_to_image(docx_bytes):
     # Load the DOCX document from bytes
-    doc = docx.Document(io.BytesIO(docx_bytes))
+    doc = Document(io.BytesIO(docx_bytes))
 
     # Create an image in memory
     img = Image.new("RGB", (800, 600), "white")
