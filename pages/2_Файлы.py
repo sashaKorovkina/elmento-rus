@@ -120,7 +120,7 @@ def chat_to_ai(file_name):
     # Functionality to chat about the specific PDF
     st.write(f"Chatting about {file_name}...")
 
-def get_summary(pdf_bytes, file_name):
+def get_summary(pdf_bytes, file_name, language):
     st.write(f"Getting summary for {file_name}...")
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
@@ -133,7 +133,12 @@ def get_summary(pdf_bytes, file_name):
         pdf_image = Image.open(io.BytesIO(image_data))
         pdf_images.append(pdf_image)
 
-        text = pytesseract.image_to_string(pdf_image, lang= 'rus')
+        if language == 'Russian':
+            lang = 'rus'
+        elif language == 'English':
+            lang = 'eng'
+
+        text = pytesseract.image_to_string(pdf_image, lang= lang)
         # lang = detect(text)
         # st.write(lang)
         pdf_texts.append(text)
@@ -539,7 +544,7 @@ if st.session_state.logged_in:
                     if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
                         pdf_parse_content(pdf_bytes, language)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
-                        get_summary(pdf_bytes, file['filename'])
+                        get_summary(pdf_bytes, file['filename'], language)
 
                 elif file_extension == "docx":
                     pdf_bytes = get_img_blob(file)
