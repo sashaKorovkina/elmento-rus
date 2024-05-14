@@ -258,7 +258,7 @@ def doc_page_to_image(pdf_stream):
 
     doc.close()
     return img_bytes
-def pdf_parse_content(pdf_bytes):
+def pdf_parse_content(pdf_bytes, language):
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
     pdf_texts = []  # List to store text from all pages
@@ -526,15 +526,15 @@ if st.session_state.logged_in:
 
                 elif file_extension == "pdf":
                     pdf_bytes = get_img_blob(file)
-                    if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
-                        pdf_parse_content(pdf_bytes)
-                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
-                        get_summary(pdf_bytes, file['filename'])
                     language = st.selectbox(
                         "Select the language for the conversation:",
-                        ["English", "Russian", "Spanish", "French", "German"],
+                        ["English", "Russian"],
                         key=f"supfile_{file['url']}"
                     )
+                    if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
+                        pdf_parse_content(pdf_bytes, language)
+                    if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
+                        get_summary(pdf_bytes, file['filename'])
 
                 elif file_extension == "docx":
                     pdf_bytes = get_img_blob(file)
