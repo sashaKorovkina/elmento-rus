@@ -459,7 +459,7 @@ st.title("Мои документы")
 if st.session_state.logged_in:
     secrets = st.secrets['openai-api-key']
     api_key = secrets["OPEN_AI_KEY"]
-    cleanup_tempdir()  # cleanup temp dir from previous user sessions
+    #cleanup_tempdir()  # cleanup temp dir from previous user sessions
     tmpdirname = make_tempdir()  # make temp dir for each user session
 
     #api_key = st.text_input("OpenAI API Key", key="file_qa_api_key", type="password")
