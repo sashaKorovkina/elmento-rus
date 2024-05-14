@@ -430,10 +430,11 @@ def get_img_blob(file):
 def make_tempdir():
     if 'tempfiledir' not in st.session_state:
         tempfiledir = tempfile.gettempdir()
-        tempfiledir = tempfiledir.joinpath(f"{uuid.uuid4()}")   # make unique subdir
-        tempfiledir.mkdir(parents=True, exist_ok=True)  # make dir if not exists
-        st.session_state['tempfiledir'] = tempfiledir
+        unique_dir = os.path.join(tempfiledir, str(uuid.uuid4()))  # Make unique subdir
+        os.makedirs(unique_dir, exist_ok=True)  # Make dir if not exists
+        st.session_state['tempfiledir'] = unique_dir
     return st.session_state['tempfiledir']
+
 
 # @st.cache_resource(ttl=60*60*24)
 # def cleanup_tempdir() -> None:
