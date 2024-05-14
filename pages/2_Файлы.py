@@ -5,7 +5,6 @@ import io
 import pytesseract
 from streamlit.components.v1 import html
 from firebase_admin import firestore, storage
-import datetime
 import fitz
 import contextlib
 from math import ceil
@@ -15,7 +14,7 @@ import re
 import shutil
 import tempfile
 import uuid
-import datetime
+from datetime import datetime
 from io import BytesIO
 from subprocess import PIPE, run
 
