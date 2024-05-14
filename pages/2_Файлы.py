@@ -530,6 +530,10 @@ if st.session_state.logged_in:
                         pdf_parse_content(pdf_bytes)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
                         get_summary(pdf_bytes, file['filename'])
+                    language = st.selectbox(
+                        "Select the language for the conversation:",
+                        ["English", "Russian", "Spanish", "French", "German"]
+                    )
 
                 elif file_extension == "docx":
                     pdf_bytes = get_img_blob(file)
