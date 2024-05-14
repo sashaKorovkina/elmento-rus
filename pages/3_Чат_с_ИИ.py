@@ -97,6 +97,21 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                         for question_type in question_types:
                             if st.sidebar.button(question_type, use_container_width=True):
                                 selected_question_type = question_type
+                                chat_id = selected_chat_data['chat_id']
+                                with st.chat_message("user"):
+                                    st.markdown(selected_question_type)
+                                # st.session_state.messages.append({"role": "user", "content": prompt})
+                                response = response_func(selected_question_type, selected_chat_data['pdf_text'])
+                                with st.chat_message("assistant"):
+                                    st.markdown(response)
+                                doc_ref = db.collection('users').document(username).collection('chats').document(
+                                    chat_id).collection(
+                                    'messages').document()
+                                doc_ref.set({
+                                    'message_user': selected_question_type,
+                                    'message_ai': response,
+                                    'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat()
+                                })
 
                     # Further processing based on the selected question type
                     if selected_question_type:
