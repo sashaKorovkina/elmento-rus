@@ -533,7 +533,7 @@ if st.session_state.logged_in:
                     language = st.selectbox(
                         "Select the language for the conversation:",
                         ["English", "Russian", "Spanish", "French", "German"],
-                        key="language_select"
+                        key=f"supfile_{file['url']}"
                     )
 
                 elif file_extension == "docx":
