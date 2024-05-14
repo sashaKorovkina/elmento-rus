@@ -9,8 +9,6 @@ from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import datetime
 from langchain.prompts import PromptTemplate
-from langchain.chains import RetrievalQA
-from langchain.llms import Cohere
 
 db = firestore.client()
 
@@ -29,25 +27,7 @@ def response_func(prompt, text):
     docs = knowledge_base.similarity_search(prompt)
     llm = OpenAI(openai_api_key = api_key)
 
-    prompt_template = """Text: {context}
-
-    Question: {question}
-
-    Answer the question based on the PDF Document provided. If the text doesn't contain the answer, reply that the answer is not available.
-    Do Not Hallucinate"""
-
-    PROMPT = PromptTemplate(
-        template=prompt_template, input_variables=["context", "question"]
-    )
-    chain_type_kwargs = {"prompt": PROMPT}
-
-    chain = RetrievalQA.from_chain_type(llm=Cohere(model="command-nightly", temperature=0.9),
-                                     chain_type="stuff",
-                                     retriever=db.as_retriever(),
-                                     chain_type_kwargs=chain_type_kwargs,
-                                     return_source_documents=True)
-
-    #chain = load_qa_chain(llm, chain_type="stuff")
+    chain = load_qa_chain(llm, chain_type="stuff")
     with get_openai_callback() as cb:
         result = chain.run(input_documents=docs, question=prompt)
     return result
