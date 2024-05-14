@@ -30,7 +30,7 @@ def response_func(prompt, text):
 
     chain = load_qa_chain(llm, chain_type="stuff")
     with get_openai_callback() as cb:
-        result = chain.run(input_documents=docs, question=prompt, max_tokens=4000)
+        result = chain.run(input_documents=docs, question=prompt)
     return result
 
 
