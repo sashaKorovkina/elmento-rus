@@ -548,10 +548,15 @@ if st.session_state.logged_in:
 
                 elif file_extension == "docx":
                     pdf_bytes = get_img_blob(file)
+                    language = st.selectbox(
+                        "Select the language for the conversation:",
+                        ["English", "Russian"],
+                        key=f"supfile_{file['url']}"
+                    )
                     if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
-                        pdf_parse_content(pdf_bytes)
+                        pdf_parse_content(pdf_bytes, language)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
-                        get_summary(pdf_bytes, file['filename'])
+                        get_summary(pdf_bytes, file['filename'], language)
 
         col = (col + 1) % row_size
 
