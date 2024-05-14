@@ -435,7 +435,6 @@ def make_tempdir():
         st.session_state['tempfiledir'] = unique_dir
     return st.session_state['tempfiledir']
 
-
 # @st.cache_resource(ttl=60*60*24)
 # def cleanup_tempdir() -> None:
 #     '''Cleanup temp dir for all user sessions.
