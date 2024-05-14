@@ -29,6 +29,18 @@ def response_func(prompt, text):
     docs = knowledge_base.similarity_search(prompt)
     llm = OpenAI(openai_api_key = api_key)
 
+    prompt_template = """Text: {context}
+
+    Question: {question}
+
+    Answer the question based on the PDF Document provided. If the text doesn't contain the answer, reply that the answer is not available.
+    Do Not Hallucinate"""
+
+    PROMPT = PromptTemplate(
+        template=prompt_template, input_variables=["context", "question"]
+    )
+    chain_type_kwargs = {"prompt": PROMPT}
+
     chain = RetrievalQA.from_chain_type(llm=Cohere(model="command-nightly", temperature=0.9),
                                      chain_type="stuff",
                                      retriever=db.as_retriever(),
