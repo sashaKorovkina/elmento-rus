@@ -435,24 +435,24 @@ def make_tempdir():
         st.session_state['tempfiledir'] = tempfiledir
     return st.session_state['tempfiledir']
 
-@st.cache_resource(ttl=60*60*24)
-def cleanup_tempdir() -> None:
-    '''Cleanup temp dir for all user sessions.
-    Filters the temp dir for uuid4 subdirs.
-    Deletes them if they exist and are older than 1 day.
-    '''
-    deleteTime = datetime.now() - timedelta(days=1)
-    # compile regex for uuid4
-    uuid4_regex = r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
-    uuid4_regex = re.compile(uuid4_regex)
-    tempfiledir = Path(tempfile.gettempdir())
-    if tempfiledir.exists():
-        subdirs = [x for x in tempfiledir.iterdir() if x.is_dir()]
-        subdirs_match = [x for x in subdirs if uuid4_regex.match(x.name)]
-        for subdir in subdirs_match:
-            itemTime = datetime.fromtimestamp(subdir.stat().st_mtime)
-            if itemTime < deleteTime:
-                shutil.rmtree(subdir)
+# @st.cache_resource(ttl=60*60*24)
+# def cleanup_tempdir() -> None:
+#     '''Cleanup temp dir for all user sessions.
+#     Filters the temp dir for uuid4 subdirs.
+#     Deletes them if they exist and are older than 1 day.
+#     '''
+#     deleteTime = datetime.now() - timedelta(days=1)
+#     # compile regex for uuid4
+#     uuid4_regex = r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+#     uuid4_regex = re.compile(uuid4_regex)
+#     tempfiledir = Path(tempfile.gettempdir())
+#     if tempfiledir.exists():
+#         subdirs = [x for x in tempfiledir.iterdir() if x.is_dir()]
+#         subdirs_match = [x for x in subdirs if uuid4_regex.match(x.name)]
+#         for subdir in subdirs_match:
+#             itemTime = datetime.fromtimestamp(subdir.stat().st_mtime)
+#             if itemTime < deleteTime:
+#                 shutil.rmtree(subdir)
 
 st.title("Мои документы")
 
