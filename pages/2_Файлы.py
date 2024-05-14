@@ -532,7 +532,8 @@ if st.session_state.logged_in:
                         get_summary(pdf_bytes, file['filename'])
                     language = st.selectbox(
                         "Select the language for the conversation:",
-                        ["English", "Russian", "Spanish", "French", "German"]
+                        ["English", "Russian", "Spanish", "French", "German"],
+                        key="language_select"
                     )
 
                 elif file_extension == "docx":
