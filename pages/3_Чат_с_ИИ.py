@@ -100,7 +100,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
                     # Further processing based on the selected question type
                     if selected_question_type:
-                        st.write(f"Вы выбрали тип вопроса: {selected_question_type}")
+                        # st.write(f"Вы выбрали тип вопроса: {selected_question_type}")
                         chat_id = selected_chat_data['chat_id']
                         with st.chat_message("user"):
                             st.markdown(selected_question_type)
