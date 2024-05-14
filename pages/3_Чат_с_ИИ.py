@@ -27,7 +27,7 @@ def response_func(prompt, text):
     docs = knowledge_base.similarity_search(prompt)
     llm = OpenAI(openai_api_key=api_key)
 
-    chain = load_qa_chain(llm, chain_type="stuff")
+    chain = load_qa_chain(llm, chain_type="stuff", max_tokens_limit=500)
     with get_openai_callback() as cb:
         result = chain.run(input_documents=docs, question=prompt)
         st.write(result)
