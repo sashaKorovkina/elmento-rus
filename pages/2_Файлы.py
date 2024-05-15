@@ -537,7 +537,7 @@ if st.session_state.logged_in:
                 elif file_extension == "pdf":
                     pdf_bytes = get_img_blob(file)
                     language = st.selectbox(
-                        "Select the language for the conversation:",
+                        "Выберите язык разговора:",
                         ["Английский", "Русский"],
                         key=f"supfile_{file['url']}"
                     )
@@ -549,7 +549,7 @@ if st.session_state.logged_in:
                 elif file_extension == "docx":
                     pdf_bytes = get_img_blob(file)
                     language = st.selectbox(
-                        "Select the language for the conversation:",
+                        "Выберите язык разговора:",
                         ["Английский", "Русский"],
                         key=f"supfile_{file['url']}"
                     )
