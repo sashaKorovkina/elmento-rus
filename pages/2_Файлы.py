@@ -312,12 +312,12 @@ def upload_file(uploaded_file, thumbnail_stream):
         thumb_blob = bucket.blob(f"{username}/{uuid.uuid4()}_thumb_{uploaded_file.name}")
         thumb_blob.upload_from_string(thumbnail_stream.getvalue(), content_type='image/png')
 
-        thumb_url = thumb_blob.generate_signed_url(version="v4", expiration=datetime.timedelta(minutes=10000),
+        thumb_url = thumb_blob.generate_signed_url(version="v4", expiration=timedelta(minutes=10000),
                                                    method='GET')
     else:
         thumb_url = None
 
-    url = blob.generate_signed_url(version="v4", expiration=datetime.timedelta(minutes=10000), method='GET')
+    url = blob.generate_signed_url(version="v4", expiration=timedelta(minutes=10000), method='GET')
 
     doc_ref = db.collection('users').document(username).collection('documents').document()
     doc_ref.set({
