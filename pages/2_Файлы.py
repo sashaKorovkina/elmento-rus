@@ -275,9 +275,9 @@ def pdf_parse_content(pdf_bytes, language):
         pdf_image = Image.open(io.BytesIO(image_data))
         pdf_images.append(pdf_image)
 
-        if language == 'Russian':
+        if language == 'Русский':
             lang = 'rus'
-        elif language == 'English':
+        elif language == 'Английский':
             lang = 'eng'
 
         text = pytesseract.image_to_string(pdf_image, lang = lang)
