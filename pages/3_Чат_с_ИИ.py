@@ -29,8 +29,9 @@ def response_func(prompt, text):
     #OpenAI(temperature=1, max_tokens=1000)
 
     chain = load_qa_chain(llm, chain_type="stuff")
+    prompt_final = f'Always reply in Russian. {prompt}'
     with get_openai_callback() as cb:
-        result = chain.run(input_documents=docs, question=prompt)
+        result = chain.run(input_documents=docs, question=prompt_final)
     return result
 
 
