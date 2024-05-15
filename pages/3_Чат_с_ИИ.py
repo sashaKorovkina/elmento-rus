@@ -29,9 +29,8 @@ def response_func(prompt, text):
     #OpenAI(temperature=1, max_tokens=1000)
 
     chain = load_qa_chain(llm, chain_type="stuff")
-    prompt_final = f'Always reply in Russian. {prompt}'
     with get_openai_callback() as cb:
-        result = chain.run(input_documents=docs, question=prompt_final)
+        result = chain.run(input_documents=docs, question=prompt)
     return result
 
 
@@ -189,6 +188,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                         with st.chat_message("user"):
                             st.markdown(prompt)
                         # st.session_state.messages.append({"role": "user", "content": prompt})
+                        prompt = f'Always reply in the same language as the question was asked in. {prompt}'
                         response = response_func(prompt, selected_chat_data['pdf_text'])
                         with st.chat_message("assistant"):
                             st.markdown(response)
