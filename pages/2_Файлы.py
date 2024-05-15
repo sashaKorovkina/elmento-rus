@@ -538,7 +538,7 @@ if st.session_state.logged_in:
                     pdf_bytes = get_img_blob(file)
                     language = st.selectbox(
                         "Select the language for the conversation:",
-                        ["English", "Russian"],
+                        ["Английский", "Русский"],
                         key=f"supfile_{file['url']}"
                     )
                     if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
