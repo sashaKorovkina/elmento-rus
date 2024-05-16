@@ -150,7 +150,7 @@ def get_summary(pdf_bytes, file_name, language, file_id):
     send_text_to_openai(pdf_texts, file_id)
 
 
-def nav_page(page_name, timeout_secs=3):
+def nav_page(page_name, timeout_secs=3, name):
     page_name_lower = page_name.lower()
     nav_script = f"""
         <script type="text/javascript">
@@ -177,7 +177,7 @@ def nav_page(page_name, timeout_secs=3):
             }});
         </script>
     """
-    st.session_state.selected_chat_name = 'SAB.ES.pdf'
+    st.session_state.selected_chat_name = name
     html(nav_script)
 
 
@@ -309,7 +309,7 @@ def pdf_parse_content(pdf_bytes, language):
         'file_id' : file['doc_id']
     })
 
-    nav_page("Чат_с_ИИ")
+    nav_page("Чат_с_ИИ", file['filename'])
 
 
 def upload_file(uploaded_file, thumbnail_stream):
