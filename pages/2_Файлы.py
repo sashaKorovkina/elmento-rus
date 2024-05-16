@@ -125,7 +125,7 @@ def chat_to_ai(file_name):
     st.write(f"Chatting about {file_name}...")
 
 def get_summary(pdf_bytes, file_name, language, file_id):
-    st.write(f"Getting summary for {file_name}...")
+    st.write(f"Getting summary for {file_id}...")
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
     pdf_texts = []  # List to store text from all pages
