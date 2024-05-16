@@ -60,7 +60,8 @@ st.title("Чат с Elmento")
 
 # MAIN SCRIPT
 if 'logged_in' in st.session_state and st.session_state.logged_in:
-    api_key = st.text_input("Enter your OpenAI API Key")
+    secrets = st.secrets['openai-api-key']
+    api_key = secrets["OPEN_AI_KEY"]
     if 'username' in st.session_state:
         username = st.session_state['username']
         # st.write(f"Logged in as: {username}")
