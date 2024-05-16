@@ -572,7 +572,7 @@ if st.session_state.logged_in:
                 if summary:
                     st.write(summary)
                 else:
-                    st.write("Summary is empty")
+                    st.write("")
 
         col = (col + 1) % row_size
 
