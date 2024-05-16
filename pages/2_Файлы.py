@@ -535,6 +535,8 @@ if st.session_state.logged_in:
                 uploaded_at_slot.markdown(f"<span style='background-color: transparent;'>{file['uploaded_at']}</span>",
                                           unsafe_allow_html=True)
 
+                st.write(file['summary'])
+
                 # Place buttons in the button row
                 file_extension = file['filename'].split(".")[-1].lower()
 
