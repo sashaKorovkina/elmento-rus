@@ -535,7 +535,7 @@ if st.session_state.logged_in:
                 uploaded_at_slot.markdown(f"<span style='background-color: transparent;'>{file['uploaded_at']}</span>",
                                           unsafe_allow_html=True)
 
-                file_ref = db.collection('users').document(username).collection('documents').document(file_id)
+                file_ref = db.collection('users').document(username).collection('documents').document(file['doc_id'])
                 file = file_ref.get()
 
                 if file.exists:
