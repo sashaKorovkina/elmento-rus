@@ -105,7 +105,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
                     # Further processing based on the selected question type
                     if selected_question_type == "Структура научной статьи по ГОСТ":
-                        selected_question_type = f'''Write an essay in Russian following this format: Титульная страница:
+                        selected_question_type = f'''Write an essay in Russian following this format and keep it under 1000 tokens: Титульная страница:
                        - Заголовок статьи (ГОСТ 7.1-2003):
                          - Должен точно отражать тему исследования.
                          - Прописные буквы не использовать, кроме первой буквы и имен собственных.
