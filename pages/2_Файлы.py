@@ -92,7 +92,7 @@ def send_image_to_openai(image_bytes, api_key, key):
         except Exception as e:
             st.error(f"Error: {e}")
 
-def send_text_to_openai(text_content):
+def send_text_to_openai(text_content, file_id):
     headers = {
       "Content-Type": "application/json",
       "Authorization": f"Bearer {api_key}"
@@ -113,7 +113,7 @@ def send_text_to_openai(text_content):
         response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
         explanation = response.json()['choices'][0]['message']['content']
         st.success(f"Explanation: {explanation}")
-        doc_ref = db.collection('users').document(username).collection('documents').document()
+        doc_ref = db.collection('users').document(username).collection('documents').document(file_id)
         doc_ref.set({
             'summary': explanation
         })
@@ -124,7 +124,7 @@ def chat_to_ai(file_name):
     # Functionality to chat about the specific PDF
     st.write(f"Chatting about {file_name}...")
 
-def get_summary(pdf_bytes, file_name, language):
+def get_summary(pdf_bytes, file_name, language, file_id):
     st.write(f"Getting summary for {file_name}...")
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
@@ -147,7 +147,7 @@ def get_summary(pdf_bytes, file_name, language):
         # st.write(lang)
         pdf_texts.append(text)
 
-    send_text_to_openai(pdf_texts)
+    send_text_to_openai(pdf_texts, file_id)
 
 
 def nav_page(page_name, timeout_secs=3):
@@ -564,7 +564,7 @@ if st.session_state.logged_in:
                     if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
                         pdf_parse_content(pdf_bytes, language)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
-                        get_summary(pdf_bytes, file['filename'], language)
+                        get_summary(pdf_bytes, file['filename'], language, file['doc_id'])
 
         col = (col + 1) % row_size
 
