@@ -9,6 +9,7 @@ from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import datetime
 from langchain.prompts import PromptTemplate
+from openai.exceptions import BadRequestError
 
 db = firestore.client()
 
