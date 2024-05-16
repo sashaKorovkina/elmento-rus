@@ -14,24 +14,27 @@ db = firestore.client()
 
 # FUNCTIONS
 def response_func(prompt, text):
-    text = str(text)
-    text_splitter = CharacterTextSplitter(
-        separator="\n",
-        chunk_size=4000,
-        chunk_overlap=200,
-        length_function=len
-    )
-    chunks = text_splitter.split_text(text)
-    embeddings = OpenAIEmbeddings(openai_api_key = api_key)
-    knowledge_base = FAISS.from_texts(chunks, embeddings)
-    docs = knowledge_base.similarity_search(prompt)
-    llm = OpenAI(openai_api_key=api_key, max_tokens=1000)
-    #OpenAI(temperature=1, max_tokens=1000)
+    try:
+        text = str(text)
+        text_splitter = CharacterTextSplitter(
+            separator="\n",
+            chunk_size=4000,
+            chunk_overlap=200,
+            length_function=len
+        )
+        chunks = text_splitter.split_text(text)
+        embeddings = OpenAIEmbeddings(openai_api_key = api_key)
+        knowledge_base = FAISS.from_texts(chunks, embeddings)
+        docs = knowledge_base.similarity_search(prompt)
+        llm = OpenAI(openai_api_key=api_key, max_tokens=1000)
+        #OpenAI(temperature=1, max_tokens=1000)
 
-    chain = load_qa_chain(llm, chain_type="stuff")
-    with get_openai_callback() as cb:
-        result = chain.run(input_documents=docs, question=prompt)
-    return result
+        chain = load_qa_chain(llm, chain_type="stuff")
+        with get_openai_callback() as cb:
+            result = chain.run(input_documents=docs, question=prompt)
+        return result
+    except BadRequestError as e:
+        st.error("Ух ты, это огромный файл! Мы не можем его обработать прямо сейчас, но обязательно свяжемся с нашими разработчиками для улучшения системы!")
 
 
 def display_messages(chat_id, username):
