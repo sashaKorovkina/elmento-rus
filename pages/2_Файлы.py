@@ -114,7 +114,7 @@ def send_text_to_openai(text_content, file_id):
         explanation = response.json()['choices'][0]['message']['content']
         st.success(f"Explanation: {explanation}")
         doc_ref = db.collection('users').document(username).collection('documents').document(file_id)
-        doc_ref.set({
+        doc_ref.update({
             'summary': explanation
         })
     except Exception as e:
