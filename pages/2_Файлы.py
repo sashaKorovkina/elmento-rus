@@ -501,11 +501,11 @@ if st.session_state.logged_in:
 
     controls = st.columns(2)
     with controls[0]:
-        batch_size = st.select_slider("Batch size:", range(10, 110, 10))
+        batch_size = st.select_slider("Кол-во документов на странице:", range(10, 110, 10))
     row_size = 3
     num_batches = ceil(len(files) / batch_size)
     with controls[1]:
-        page = st.selectbox("Page", range(1, num_batches + 1))
+        page = st.selectbox("Страница", range(1, num_batches + 1))
 
     # Sort the entire list of files based on the 'timestamp' key
     files.sort(key=lambda x: x['uploaded_at'], reverse=True)
