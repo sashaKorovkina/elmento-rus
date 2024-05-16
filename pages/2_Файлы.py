@@ -335,7 +335,8 @@ def upload_file(uploaded_file, thumbnail_stream):
         'blob': str(blob),
         'thumbnail_url': thumb_url,
         'uploaded_at': firestore.SERVER_TIMESTAMP,
-        'doc_id': doc_ref.id
+        'doc_id': doc_ref.id,
+        'summary': None
     })
 
     return doc_ref.get().to_dict()
