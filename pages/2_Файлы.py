@@ -536,12 +536,6 @@ if st.session_state.logged_in:
                 uploaded_at_slot.markdown(f"<span style='background-color: transparent;'>{file['uploaded_at']}</span>",
                                           unsafe_allow_html=True)
 
-                summary = file['summary']
-                if summary:
-                    st.write(summary)
-                else:
-                    st.write("Summary is empty")
-
 
                 # Place buttons in the button row
                 file_extension = file['filename'].split(".")[-1].lower()
@@ -573,6 +567,12 @@ if st.session_state.logged_in:
                         pdf_parse_content(pdf_bytes, language)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
                         get_summary(pdf_bytes, file['filename'], language, file['doc_id'])
+
+                summary = file['summary']
+                if summary:
+                    st.write(summary)
+                else:
+                    st.write("Summary is empty")
 
         col = (col + 1) % row_size
 
