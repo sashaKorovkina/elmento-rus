@@ -182,7 +182,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                         })
 
                     if selected_question_type == "Структура курсовой работы по ГОСТ":
-                        selected_question_type = f'''Write an essay in Russian following this format and keep it under 1000 tokens: 
+                        selected_question_type = f'''Write an essay about the file in Russian following this format and keep it under 1000 tokens: 
                         1. Титульный лист:
                            - Оформляется в соответствии с требованиями учебного заведения.
                            - Включает:
