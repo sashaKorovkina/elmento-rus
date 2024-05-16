@@ -150,7 +150,7 @@ def get_summary(pdf_bytes, file_name, language, file_id):
     send_text_to_openai(pdf_texts, file_id)
 
 
-def nav_page(page_name, timeout_secs=3, name):
+def nav_page(page_name, name_page, timeout_secs=3):
     page_name_lower = page_name.lower()
     nav_script = f"""
         <script type="text/javascript">
@@ -177,7 +177,7 @@ def nav_page(page_name, timeout_secs=3, name):
             }});
         </script>
     """
-    st.session_state.selected_chat_name = name
+    st.session_state.selected_chat_name = name_page
     html(nav_script)
 
 
