@@ -101,5 +101,5 @@ if not st.session_state['signedout']:
             st.balloons()
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
-    st.write(username)
+    st.write(st.session_state.useremail)
 
