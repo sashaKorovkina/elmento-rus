@@ -113,6 +113,10 @@ def send_text_to_openai(text_content):
         response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
         explanation = response.json()['choices'][0]['message']['content']
         st.success(f"Explanation: {explanation}")
+        doc_ref = db.collection('users').document(username).collection('documents').document()
+        doc_ref.set({
+            'summary': explanation
+        })
     except Exception as e:
         st.error(f"Error: {e}")
 
@@ -251,6 +255,7 @@ def pdf_page_to_image(pdf_stream):
     doc.close()
     return img_bytes
 
+
 def doc_page_to_image(pdf_stream):
     doc = fitz.open("pdf", pdf_stream)
     page = doc.load_page(0)
@@ -263,6 +268,8 @@ def doc_page_to_image(pdf_stream):
 
     doc.close()
     return img_bytes
+
+
 def pdf_parse_content(pdf_bytes, language):
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
@@ -302,6 +309,7 @@ def pdf_parse_content(pdf_bytes, language):
     })
 
     nav_page("Чат_с_ИИ")
+
 
 def upload_file(uploaded_file, thumbnail_stream):
     blob = bucket.blob(f"{username}/{uuid.uuid4()}_{uploaded_file.name}")
