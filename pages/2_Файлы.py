@@ -538,14 +538,12 @@ if st.session_state.logged_in:
                 file_ref = db.collection('users').document(username).collection('documents').document(file['doc_id'])
                 file = file_ref.get()
 
-                if file.exists:
-                    summary = file.to_dict().get('summary')
-                    if summary:
-                        st.write(summary)
-                    else:
-                        st.write("Summary is empty")
+                summary = file.to_dict().get('summary')
+                if summary:
+                    st.write(summary)
                 else:
-                    st.write("Record does not exist")
+                    st.write("Summary is empty")
+
 
                 # Place buttons in the button row
                 file_extension = file['filename'].split(".")[-1].lower()
