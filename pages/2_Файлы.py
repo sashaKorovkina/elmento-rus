@@ -538,7 +538,7 @@ if st.session_state.logged_in:
                 file_ref = db.collection('users').document(username).collection('documents').document(file['doc_id'])
                 file = file_ref.get()
 
-                summary = file.to_dict().get('summary')
+                summary = file['summary']
                 if summary:
                     st.write(summary)
                 else:
