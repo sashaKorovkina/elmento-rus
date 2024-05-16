@@ -27,7 +27,7 @@ def response_func(prompt, text):
         embeddings = OpenAIEmbeddings(openai_api_key = api_key)
         knowledge_base = FAISS.from_texts(chunks, embeddings)
         docs = knowledge_base.similarity_search(prompt)
-        llm = OpenAI(openai_api_key=api_key, max_tokens=1500)
+        llm = OpenAI(openai_api_key=api_key, max_tokens=1000)
         #OpenAI(temperature=1, max_tokens=1000)
 
         chain = load_qa_chain(llm, chain_type="stuff")
