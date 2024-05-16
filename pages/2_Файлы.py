@@ -535,7 +535,17 @@ if st.session_state.logged_in:
                 uploaded_at_slot.markdown(f"<span style='background-color: transparent;'>{file['uploaded_at']}</span>",
                                           unsafe_allow_html=True)
 
-                st.write(file['summary'])
+                file_ref = db.collection('users').document(username).collection('documents').document(file_id)
+                file = file_ref.get()
+
+                if file.exists:
+                    summary = file.to_dict().get('summary')
+                    if summary:
+                        st.write(summary)
+                    else:
+                        st.write("Summary is empty")
+                else:
+                    st.write("Record does not exist")
 
                 # Place buttons in the button row
                 file_extension = file['filename'].split(".")[-1].lower()
