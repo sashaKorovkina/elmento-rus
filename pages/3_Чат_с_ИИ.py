@@ -262,7 +262,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                         })
 
                     if selected_question_type == "Структура дипломной работы по ГОСТ":
-                        selected_question_type = f'''Write an essay in Russian following this format and keep it under 1000 tokens: 
+                        selected_question_type = f'''Write an essay in Russian following the format below and keep it under 1000 tokens: 
                         1. Титульный лист:
                            - Оформляется по требованиям вуза.
                            - Включает:
@@ -329,9 +329,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                            - Выводы по каждой задаче работы.
                            - Практическая значимость результатов.
                            - Рекомендации и перспективы дальнейшего исследования.
-                        
-                        9. Приложения:
-                           - Размещаются после списка литературы.
                     '''
                         # st.write(f"Вы выбрали тип вопроса: {selected_question_type}")
                         chat_id = selected_chat_data['chat_id']
