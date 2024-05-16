@@ -177,6 +177,7 @@ def nav_page(page_name, timeout_secs=3):
             }});
         </script>
     """
+    st.session_state.selected_chat_name = 'SAB.ES.pdf'
     html(nav_script)
 
 
