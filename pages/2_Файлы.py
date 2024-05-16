@@ -133,9 +133,9 @@ def get_summary(pdf_bytes, file_name, language):
         pdf_image = Image.open(io.BytesIO(image_data))
         pdf_images.append(pdf_image)
 
-        if language == 'Russian':
+        if language == 'Русский':
             lang = 'rus'
-        elif language == 'English':
+        elif language == 'Английский':
             lang = 'eng'
 
         text = pytesseract.image_to_string(pdf_image, lang= lang)
@@ -537,8 +537,8 @@ if st.session_state.logged_in:
                 elif file_extension == "pdf":
                     pdf_bytes = get_img_blob(file)
                     language = st.selectbox(
-                        "Select the language for the conversation:",
-                        ["English", "Russian"],
+                        "Выберите язык разговора:",
+                        ["Английский", "Русский"],
                         key=f"supfile_{file['url']}"
                     )
                     if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
@@ -549,8 +549,8 @@ if st.session_state.logged_in:
                 elif file_extension == "docx":
                     pdf_bytes = get_img_blob(file)
                     language = st.selectbox(
-                        "Select the language for the conversation:",
-                        ["English", "Russian"],
+                        "Выберите язык разговора:",
+                        ["Английский", "Русский"],
                         key=f"supfile_{file['url']}"
                     )
                     if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
