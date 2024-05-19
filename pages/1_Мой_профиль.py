@@ -94,6 +94,7 @@ if not st.session_state['signedout']:
             doc_ref.set({
                 'uid': user.uid,
                 'email': email,
+                'timestamp': firestore.SERVER_TIMESTAMP
             })
 
             st.success('Аккаунт успешно создан!')
