@@ -92,7 +92,7 @@ def send_image_to_openai(image_bytes, api_key, key):
         except Exception as e:
             st.error(f"Error: {e}")
 
-def send_text_to_openai(text_content):
+def send_text_to_openai(text_content, file_id):
     headers = {
       "Content-Type": "application/json",
       "Authorization": f"Bearer {api_key}"
@@ -113,6 +113,10 @@ def send_text_to_openai(text_content):
         response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
         explanation = response.json()['choices'][0]['message']['content']
         st.success(f"Explanation: {explanation}")
+        doc_ref = db.collection('users').document(username).collection('documents').document(file_id)
+        doc_ref.update({
+            'summary': explanation
+        })
     except Exception as e:
         st.error(f"Error: {e}")
 
@@ -120,8 +124,8 @@ def chat_to_ai(file_name):
     # Functionality to chat about the specific PDF
     st.write(f"Chatting about {file_name}...")
 
-def get_summary(pdf_bytes, file_name, language):
-    st.write(f"Getting summary for {file_name}...")
+def get_summary(pdf_bytes, file_name, language, file_id):
+    st.write(f"Getting summary for {file_id}...")
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
     pdf_texts = []  # List to store text from all pages
@@ -133,9 +137,9 @@ def get_summary(pdf_bytes, file_name, language):
         pdf_image = Image.open(io.BytesIO(image_data))
         pdf_images.append(pdf_image)
 
-        if language == 'Russian':
+        if language == 'Русский':
             lang = 'rus'
-        elif language == 'English':
+        elif language == 'Английский':
             lang = 'eng'
 
         text = pytesseract.image_to_string(pdf_image, lang= lang)
@@ -143,10 +147,10 @@ def get_summary(pdf_bytes, file_name, language):
         # st.write(lang)
         pdf_texts.append(text)
 
-    send_text_to_openai(pdf_texts)
+    send_text_to_openai(pdf_texts, file_id)
 
 
-def nav_page(page_name, timeout_secs=3):
+def nav_page(page_name, name_page, timeout_secs=3):
     page_name_lower = page_name.lower()
     nav_script = f"""
         <script type="text/javascript">
@@ -173,6 +177,7 @@ def nav_page(page_name, timeout_secs=3):
             }});
         </script>
     """
+    st.session_state.selected_chat_name = name_page
     html(nav_script)
 
 
@@ -251,6 +256,7 @@ def pdf_page_to_image(pdf_stream):
     doc.close()
     return img_bytes
 
+
 def doc_page_to_image(pdf_stream):
     doc = fitz.open("pdf", pdf_stream)
     page = doc.load_page(0)
@@ -263,6 +269,8 @@ def doc_page_to_image(pdf_stream):
 
     doc.close()
     return img_bytes
+
+
 def pdf_parse_content(pdf_bytes, language):
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     pdf_images = []
@@ -275,9 +283,9 @@ def pdf_parse_content(pdf_bytes, language):
         pdf_image = Image.open(io.BytesIO(image_data))
         pdf_images.append(pdf_image)
 
-        if language == 'Russian':
+        if language == 'Русский':
             lang = 'rus'
-        elif language == 'English':
+        elif language == 'Английский':
             lang = 'eng'
 
         text = pytesseract.image_to_string(pdf_image, lang = lang)
@@ -301,7 +309,8 @@ def pdf_parse_content(pdf_bytes, language):
         'file_id' : file['doc_id']
     })
 
-    nav_page("Чат_с_ИИ")
+    nav_page("Чат_с_ИИ", file['filename'])
+
 
 def upload_file(uploaded_file, thumbnail_stream):
     blob = bucket.blob(f"{username}/{uuid.uuid4()}_{uploaded_file.name}")
@@ -312,12 +321,12 @@ def upload_file(uploaded_file, thumbnail_stream):
         thumb_blob = bucket.blob(f"{username}/{uuid.uuid4()}_thumb_{uploaded_file.name}")
         thumb_blob.upload_from_string(thumbnail_stream.getvalue(), content_type='image/png')
 
-        thumb_url = thumb_blob.generate_signed_url(version="v4", expiration=datetime.timedelta(minutes=10000),
+        thumb_url = thumb_blob.generate_signed_url(version="v4", expiration=timedelta(minutes=10000),
                                                    method='GET')
     else:
         thumb_url = None
 
-    url = blob.generate_signed_url(version="v4", expiration=datetime.timedelta(minutes=10000), method='GET')
+    url = blob.generate_signed_url(version="v4", expiration=timedelta(minutes=10000), method='GET')
 
     doc_ref = db.collection('users').document(username).collection('documents').document()
     doc_ref.set({
@@ -327,7 +336,8 @@ def upload_file(uploaded_file, thumbnail_stream):
         'blob': str(blob),
         'thumbnail_url': thumb_url,
         'uploaded_at': firestore.SERVER_TIMESTAMP,
-        'doc_id': doc_ref.id
+        'doc_id': doc_ref.id,
+        'summary': None
     })
 
     return doc_ref.get().to_dict()
@@ -492,11 +502,11 @@ if st.session_state.logged_in:
 
     controls = st.columns(2)
     with controls[0]:
-        batch_size = st.select_slider("Batch size:", range(10, 110, 10))
+        batch_size = st.select_slider("Кол-во документов на странице:", range(10, 110, 10))
     row_size = 3
     num_batches = ceil(len(files) / batch_size)
     with controls[1]:
-        page = st.selectbox("Page", range(1, num_batches + 1))
+        page = st.selectbox("Страница", range(1, num_batches + 1))
 
     # Sort the entire list of files based on the 'timestamp' key
     files.sort(key=lambda x: x['uploaded_at'], reverse=True)
@@ -527,6 +537,7 @@ if st.session_state.logged_in:
                 uploaded_at_slot.markdown(f"<span style='background-color: transparent;'>{file['uploaded_at']}</span>",
                                           unsafe_allow_html=True)
 
+
                 # Place buttons in the button row
                 file_extension = file['filename'].split(".")[-1].lower()
 
@@ -537,26 +548,32 @@ if st.session_state.logged_in:
                 elif file_extension == "pdf":
                     pdf_bytes = get_img_blob(file)
                     language = st.selectbox(
-                        "Select the language for the conversation:",
-                        ["English", "Russian"],
+                        "Выберите язык разговора:",
+                        ["Английский", "Русский"],
                         key=f"supfile_{file['url']}"
                     )
                     if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
                         pdf_parse_content(pdf_bytes, language)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
-                        get_summary(pdf_bytes, file['filename'], language)
+                        get_summary(pdf_bytes, file['filename'], language, file['doc_id'])
 
                 elif file_extension == "docx":
                     pdf_bytes = get_img_blob(file)
                     language = st.selectbox(
-                        "Select the language for the conversation:",
-                        ["English", "Russian"],
+                        "Выберите язык разговора:",
+                        ["Английский", "Русский"],
                         key=f"supfile_{file['url']}"
                     )
                     if st.button("Общение с ИИ", key=f"chat_{file['url']}", use_container_width=True):
                         pdf_parse_content(pdf_bytes, language)
                     if st.button("Получить сводку", key=f"chat_summary_{file['url']}", use_container_width=True):
-                        get_summary(pdf_bytes, file['filename'], language)
+                        get_summary(pdf_bytes, file['filename'], language, file['doc_id'])
+
+                summary = file['summary']
+                if summary:
+                    st.write(summary)
+                else:
+                    st.write("")
 
         col = (col + 1) % row_size
 

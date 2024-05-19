@@ -1,12 +1,22 @@
 from openai import OpenAI
 import streamlit as st
 
-st.set_page_config(
-    page_title="Hello",
-    page_icon="👋",
-)
-
 # Display FAQs
+st.title("Вас приветствует команда Elmento AI!")
+
+st.markdown("""
+Elmento AI - это российская нейросеть, которая анализирует объёмные файлы в любом расширении: от pdf и word до png и pptx. 
+
+С помощью технологии OCR (компьютерного зрения), нейросеть может читать сканы и фотографии. 
+
+В её функционал также входит создание краткого содержания (сводки) к документам, доступ к модели ChatGPT , ответы на вопросы по любому загруженному файлу и работа с информацией из её собственной базы данных. 
+
+Beta-версия Elmento AI уже предлагает вам множество преимуществ перед другими нейросетями, а мы стараемся делать её лучше. 
+
+Благодарим вас за интерес к Elmento и желаем удачи с вашими задачами!
+
+""")
+
 st.title("Часто задаваемые вопросы (FAQ):")
 
 st.markdown("""
@@ -25,22 +35,3 @@ st.markdown("""
 4. **Я нашел баг/ошибку. Куда обращаться?**
     ...к нашему сотруднику @andreyelmento в Телеграм.
 """)
-
-# if "messages" not in st.session_state:
-#     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
-#
-# for msg in st.session_state.messages:
-#     st.chat_message(msg["role"]).write(msg["content"])
-#
-# if prompt := st.chat_input():
-#     if not openai_api_key:
-#         st.info("Please add your OpenAI API key to continue.")
-#         st.stop()
-#
-#     client = OpenAI(api_key=openai_api_key)
-#     st.session_state.messages.append({"role": "user", "content": prompt})
-#     st.chat_message("user").write(prompt)
-#     response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
-#     msg = response.choices[0].message.content
-#     st.session_state.messages.append({"role": "assistant", "content": msg})
-#     st.chat_message("assistant").write(msg)

@@ -9,29 +9,33 @@ from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import datetime
 from langchain.prompts import PromptTemplate
+from openai import BadRequestError
 
 db = firestore.client()
 
 # FUNCTIONS
 def response_func(prompt, text):
-    text = str(text)
-    text_splitter = CharacterTextSplitter(
-        separator="\n",
-        chunk_size=4000,
-        chunk_overlap=200,
-        length_function=len
-    )
-    chunks = text_splitter.split_text(text)
-    embeddings = OpenAIEmbeddings(openai_api_key = api_key)
-    knowledge_base = FAISS.from_texts(chunks, embeddings)
-    docs = knowledge_base.similarity_search(prompt)
-    llm = OpenAI(openai_api_key=api_key, max_tokens=1000)
-    #OpenAI(temperature=1, max_tokens=1000)
+    try:
+        text = str(text)
+        text_splitter = CharacterTextSplitter(
+            separator="\n",
+            chunk_size=4000,
+            chunk_overlap=200,
+            length_function=len
+        )
+        chunks = text_splitter.split_text(text)
+        embeddings = OpenAIEmbeddings(openai_api_key = api_key)
+        knowledge_base = FAISS.from_texts(chunks, embeddings)
+        docs = knowledge_base.similarity_search(prompt)
+        llm = OpenAI(openai_api_key=api_key, max_tokens=1200)
+        #OpenAI(temperature=1, max_tokens=1000)
 
-    chain = load_qa_chain(llm, chain_type="stuff")
-    with get_openai_callback() as cb:
-        result = chain.run(input_documents=docs, question=prompt)
-    return result
+        chain = load_qa_chain(llm, chain_type="stuff")
+        with get_openai_callback() as cb:
+            result = chain.run(input_documents=docs, question=prompt)
+        return result
+    except BadRequestError as e:
+        st.error("Ух ты, это огромный файл! Мы не можем его обработать прямо сейчас, но обязательно свяжемся с нашими разработчиками для улучшения системы!")
 
 
 def display_messages(chat_id, username):
@@ -101,10 +105,10 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
                     # Further processing based on the selected question type
                     if selected_question_type == "Структура научной статьи по ГОСТ":
-                        selected_question_type = f'''Write an essay in Russian following this format: Титульная страница:
+                        selected_question_type = f'''Write an essay in Russian following this format and keep it under 1000 tokens: 
+                        Титульная страница:
                        - Заголовок статьи (ГОСТ 7.1-2003):
                          - Должен точно отражать тему исследования.
-                         - Прописные буквы не использовать, кроме первой буквы и имен собственных.
                        - ФИО авторов:
                          - Указывать полностью.
                        - Место работы и должность каждого автора.
@@ -156,12 +160,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                     1. Объем текста:
                        - 8-12 страниц основного текста (без титульной страницы, аннотации, списка литературы).
                     
-                    5. Таблицы и рисунки:
-                       - Таблицы нумеруются последовательно.
-                       - Заголовки таблиц располагаются над таблицей и выравниваются по левому краю.
-                       - Рисунки нумеруются и имеют подписи под рисунком по центру.
-                       - Ссылки на таблицы и рисунки даются в тексте статьи.
-                    
                     6. Ссылки в тексте:
                        - Оформляются по правилам ГОСТ 7.0.5-2008.
                        - Ссылки на источники указываются в квадратных скобках с порядковым номером источника по списку литературы.
@@ -183,12 +181,180 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                             'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat()
                         })
 
+                    if selected_question_type == "Структура курсовой работы по ГОСТ":
+                        selected_question_type = f'''Write an essay in Russian following this format and keep it under 1000 tokens: 
+                        1. Титульный лист:
+                           - Оформляется в соответствии с требованиями учебного заведения.
+                           - Включает:
+                             - Название учебного заведения.
+                             - Факультет и кафедру.
+                             - Название курсовой работы.
+                             - Данные об авторе: ФИО, курс, группа.
+                             - Данные о руководителе: должность, ФИО.
+                             - Город и год выполнения.
+                        
+                        2. Задание на курсовую работу:
+                           - Форма задания предоставляется кафедрой.
+                           - Включает:
+                             - Тему работы.
+                             - Перечень вопросов, подлежащих изучению.
+                             - Требования к оформлению работы.
+                             - График выполнения.
+                        
+                        3. Реферат/аннотация (ГОСТ 7.9-95):
+                           - Краткая характеристика содержания курсовой работы.
+                           - Объем: 150-250 слов.
+                           - Включает:
+                             - Предмет исследования.
+                             - Цель и задачи работы.
+                             - Методы исследования.
+                             - Основные результаты и выводы.
+                             - Практическая значимость.
+                        
+                        4. Содержание (ГОСТ 7.32-2017):
+                           - Перечень всех разделов, подразделов и приложений с указанием номеров страниц.
+                           - Оформляется с нумерацией разделов и подразделов.
+                        
+                        5. Введение:
+                           - Обоснование актуальности темы исследования.
+                           - Формулировка цели и задач работы.
+                           - Обзор литературы по теме.
+                           - Объект и предмет исследования.
+                           - Новизна исследования.
+                           - Методы исследования.
+                           - Структура работы.
+                        
+                        6. Основная часть:
+                           - Делится на главы и разделы.
+                           - Каждая глава должна завершаться краткими выводами.
+                           - Пример структуры основной части:
+                             - Глава 1: Теоретические аспекты исследования.
+                               - 1.1. История проблемы.
+                               - 1.2. Классификация основных понятий.
+                             - Глава 2: Анализ предметной области.
+                               - 2.1. Описание объекта исследования.
+                               - 2.2. Методы и результаты анализа.
+                             - Глава 3: Разработка и внедрение предложений.
+                               - 3.1. Описание предложенных решений.
+                               - 3.2. Оценка эффективности внедрения.
+                        
+                        7. Заключение:
+                           - Краткое изложение результатов исследования.
+                           - Выводы по каждой задаче работы.
+                           - Практическая значимость результатов.
+                           - Рекомендации и перспективы дальнейшего исследования.
+                    '''
+                        # st.write(f"Вы выбрали тип вопроса: {selected_question_type}")
+                        chat_id = selected_chat_data['chat_id']
+                        with st.chat_message("user"):
+                            st.markdown(selected_question_type)
+                        # st.session_state.messages.append({"role": "user", "content": prompt})
+                        response = response_func(selected_question_type, selected_chat_data['pdf_text'])
+                        with st.chat_message("assistant"):
+                            st.markdown(response)
+                        doc_ref = db.collection('users').document(username).collection('chats').document(
+                            chat_id).collection(
+                            'messages').document()
+                        doc_ref.set({
+                            'message_user': selected_question_type,
+                            'message_ai': response,
+                            'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat()
+                        })
+
+                    if selected_question_type == "Структура дипломной работы по ГОСТ":
+                        selected_question_type = f'''Write an essay in Russian based on the content of the file following the format below and keep it under 1000 tokens: 
+                        1. Титульный лист:
+                           - Оформляется по требованиям вуза.
+                           - Включает:
+                             - Название учебного заведения.
+                             - Факультет и кафедру.
+                             - Вид работы: дипломная работа.
+                             - Тему дипломной работы.
+                             - Данные автора: ФИО, курс, группа.
+                             - Данные руководителя: должность, ФИО.
+                             - Данные рецензента: должность, ФИО.
+                             - Город и год выполнения.
+                        
+                        2. Задание на дипломную работу:
+                           - Форма задания предоставляется кафедрой.
+                           - Включает:
+                             - Тему работы.
+                             - Содержание и структуру работы.
+                             - Перечень задач, подлежащих изучению.
+                             - Требования к оформлению работы.
+                             - График выполнения.
+                        
+                        3. Аннотация (ГОСТ 7.9-95):
+                           - Краткое изложение содержания дипломной работы.
+                           - Объем: 150-250 слов.
+                           - Включает:
+                             - Предмет исследования.
+                             - Цель и задачи работы.
+                             - Методы исследования.
+                             - Основные результаты и выводы.
+                             - Практическая значимость.
+                        
+                        4. Содержание (ГОСТ 7.32-2017):
+                           - Перечень всех разделов, подразделов и приложений с указанием номеров страниц.
+                           - Оформляется с нумерацией разделов и подразделов.
+                        
+                        5. Введение:
+                           - Обоснование актуальности темы исследования.
+                           - Формулировка цели и задач работы.
+                           - Обзор литературы по теме.
+                           - Объект и предмет исследования.
+                           - Новизна исследования.
+                           - Методы исследования.
+                           - Структура работы.
+                        
+                        6. Основная часть:
+                           - Основная часть делится на главы и разделы.
+                           - Каждая глава должна завершаться краткими выводами.
+                           - Пример структуры основной части:
+                             - Глава 1: Теоретические аспекты исследования
+                               - 1.1 История проблемы.
+                               - 1.2 Классификация основных понятий.
+                               - 1.3 Анализ литературы по теме.
+                             - Глава 2: Анализ предметной области
+                               - 2.1 Описание объекта исследования.
+                               - 2.2 Методы анализа предметной области.
+                               - 2.3 Результаты анализа.
+                             - Глава 3: Разработка и внедрение предложений
+                               - 3.1 Описание предложенных решений.
+                               - 3.2 Оценка эффективности внедрения.
+                               - 3.3 Экономическая оценка.
+                        
+                        7. Заключение:
+                           - Краткое изложение результатов исследования.
+                           - Выводы по каждой задаче работы.
+                           - Практическая значимость результатов.
+                           - Рекомендации и перспективы дальнейшего исследования.
+                    '''
+                        # st.write(f"Вы выбрали тип вопроса: {selected_question_type}")
+                        chat_id = selected_chat_data['chat_id']
+                        with st.chat_message("user"):
+                            st.markdown(selected_question_type)
+                        # st.session_state.messages.append({"role": "user", "content": prompt})
+                        response = response_func(selected_question_type, selected_chat_data['pdf_text'])
+                        with st.chat_message("assistant"):
+                            st.markdown(response)
+                        doc_ref = db.collection('users').document(username).collection('chats').document(
+                            chat_id).collection(
+                            'messages').document()
+                        doc_ref.set({
+                            'message_user': selected_question_type,
+                            'message_ai': response,
+                            'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat()
+                        })
+
+
                     if prompt := st.chat_input("Что вас интересует?"):
                         chat_id = selected_chat_data['chat_id']
                         with st.chat_message("user"):
                             st.markdown(prompt)
                         # st.session_state.messages.append({"role": "user", "content": prompt})
-                        response = response_func(prompt, selected_chat_data['pdf_text'])
+                        prompt_final = f'Always reply in the same language as the question was asked in. {prompt}'
+                        response = response_func(prompt_final, selected_chat_data['pdf_text'])
                         with st.chat_message("assistant"):
                             st.markdown(response)
                         doc_ref = db.collection('users').document(username).collection('chats').document(
