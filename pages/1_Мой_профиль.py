@@ -79,11 +79,13 @@ if not st.session_state['signedout']:
     if choice == 'Вход':
         email = st.text_input('Адрес электронной почты')
         password = st.text_input('Пароль', type='password')
+        st.write('Пожалуйста убедитесь что ваш пароль длиннее 6ти символов')
         st.button('Вход', on_click=f)
 
     else:
         email = st.text_input('Адрес электронной почты')
         password = st.text_input('Пароль', type='password')
+        st.write('Пожалуйста убедитесь что ваш пароль длиннее 6ти символов')
 
         username = st.text_input('Введите ваше уникальное имя пользователя.')
 
