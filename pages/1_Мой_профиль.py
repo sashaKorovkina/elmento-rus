@@ -5,31 +5,31 @@ from firebase_admin import credentials
 from firebase_admin import auth
 from firebase_admin import firestore
 
-def initialize_firebase_app():
-    try:
-        firebase_admin.get_app()
-    except ValueError:
-        secrets = st.secrets["firebase-auth"]
-
-        cred = credentials.Certificate({
-            "type": secrets["type"],
-            "project_id": secrets["project_id"],
-            "private_key_id": secrets["private_key_id"],
-            "private_key": secrets["private_key"],
-            "client_email": secrets["client_email"],
-            "client_id": secrets["client_id"],
-            "auth_uri": secrets["auth_uri"],
-            "token_uri": secrets["token_uri"],
-            "auth_provider_x509_cert_url": secrets["auth_provider_x509_cert_url"],
-            "client_x509_cert_url": secrets["client_x509_cert_url"]
-        })
-
-        # Initialize the Firebase app with the created credential
-        firebase_admin.initialize_app(cred,
-                                      {
-                                          'storageBucket': 'gs://elmeto-12de0.appspot.com'
-                                      }
-                                      )
+# def initialize_firebase_app():
+#     try:
+#         firebase_admin.get_app()
+#     except ValueError:
+#         secrets = st.secrets["firebase-auth"]
+#
+#         cred = credentials.Certificate({
+#             "type": secrets["type"],
+#             "project_id": secrets["project_id"],
+#             "private_key_id": secrets["private_key_id"],
+#             "private_key": secrets["private_key"],
+#             "client_email": secrets["client_email"],
+#             "client_id": secrets["client_id"],
+#             "auth_uri": secrets["auth_uri"],
+#             "token_uri": secrets["token_uri"],
+#             "auth_provider_x509_cert_url": secrets["auth_provider_x509_cert_url"],
+#             "client_x509_cert_url": secrets["client_x509_cert_url"]
+#         })
+#
+#         # Initialize the Firebase app with the created credential
+#         firebase_admin.initialize_app(cred,
+#                                       {
+#                                           'storageBucket': 'gs://elmeto-12de0.appspot.com'
+#                                       }
+#                                       )
 
 # Call the function to initialize the app
 initialize_firebase_app()
