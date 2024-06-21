@@ -59,10 +59,10 @@ def f():
         st.warning('Ошибка входа')
 
 # sign out function
-def t():
-    st.session_state.signout = False
-    st.session_state.signedout = False
-    st.session_state.username = ''
+# def t():
+#     st.session_state.signout = False
+#     st.session_state.signedout = False
+#     st.session_state.username = ''
 
 if 'signedout' not in st.session_state:
     st.session_state.signedout = False
