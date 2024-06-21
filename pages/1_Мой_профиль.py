@@ -36,11 +36,11 @@ initialize_firebase_app()
 
 st.title(':blue[Elmento AI] приветствует вас!!')
 
-# if 'username' not in st.session_state:
-#     st.session_state.username = ''
-#
-# if 'useremail' not in st.session_state:
-#     st.session_state.useremail = ''
+if 'username' not in st.session_state:
+    st.session_state.username = ''
+
+if 'useremail' not in st.session_state:
+    st.session_state.useremail = ''
 #
 # def f():
 #     try:
