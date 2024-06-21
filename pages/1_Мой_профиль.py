@@ -74,13 +74,13 @@ if not st.session_state['signedout']:
     st.session_state.db = db
 #     docs = db.collection('users').get()
 
-choice = st.selectbox('Вход/Регистрация', ['Вход', 'Регистрация'])
+    choice = st.selectbox('Вход/Регистрация', ['Вход', 'Регистрация'])
 
-#     if choice == 'Вход':
-#         email = st.text_input('Адрес электронной почты')
-#         password = st.text_input('Пароль', type='password')
-#         st.write('Пожалуйста, убедитесь, что ваш пароль длиннее 6-ти символов.')
-#         st.button('Вход', on_click=f)
+    if choice == 'Вход':
+        email = st.text_input('Адрес электронной почты')
+        password = st.text_input('Пароль', type='password')
+        st.write('Пожалуйста, убедитесь, что ваш пароль длиннее 6-ти символов.')
+        st.button('Вход', on_click=f)
 #
 #     else:
 #         email = st.text_input('Адрес электронной почты')
