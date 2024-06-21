@@ -41,23 +41,23 @@ if 'username' not in st.session_state:
 
 if 'useremail' not in st.session_state:
     st.session_state.useremail = ''
-#
-# def f():
-#     try:
-#         user = auth.get_user_by_email(email)
-#         print(user.uid)
-#
-#         st.success('Вход выполнен успешно!')
-#
-#         st.session_state.username = user.uid
-#         st.session_state.useremail = user.email
-#
-#         st.session_state.signout = True
-#         st.session_state.signedout = True
-#         st.session_state['logged_in'] = True
-#     except:
-#         st.warning('Ошибка входа')
-#
+
+def f():
+    try:
+        user = auth.get_user_by_email(email)
+        print(user.uid)
+
+        st.success('Вход выполнен успешно!')
+
+        st.session_state.username = user.uid
+        st.session_state.useremail = user.email
+
+        st.session_state.signout = True
+        st.session_state.signedout = True
+        st.session_state['logged_in'] = True
+    except:
+        st.warning('Ошибка входа')
+
 # # sign out function
 # def t():
 #     st.session_state.signout = False
