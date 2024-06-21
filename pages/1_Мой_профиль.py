@@ -81,28 +81,28 @@ if not st.session_state['signedout']:
         password = st.text_input('Пароль', type='password')
         st.write('Пожалуйста, убедитесь, что ваш пароль длиннее 6-ти символов.')
         st.button('Вход', on_click=f)
-#
-#     else:
-#         email = st.text_input('Адрес электронной почты')
-#         password = st.text_input('Пароль', type='password')
-#         st.write('Пожалуйста, убедитесь, что ваш пароль длиннее 6-ти символов.')
-#
-#         username = st.text_input('Введите ваше уникальное имя пользователя.')
-#
-#         if st.button('Создать мой аккаунт'):
-#             user = auth.create_user(email=email, password=password)
-#
-#             doc_ref = db.collection('users').document(user.uid)
-#             doc_ref.set({
-#                 'uid': user.uid,
-#                 'email': email,
-#                 'timestamp': firestore.SERVER_TIMESTAMP
-#             })
-#
-#             st.success('Аккаунт успешно создан!')
-#             st.markdown('Пожалуйста, войдите в систему, используя вашу электронную почту и пароль.')
-#             st.balloons()
-#
-# if 'logged_in' in st.session_state and st.session_state.logged_in:
-#     st.write(st.session_state.useremail)
+
+    else:
+        email = st.text_input('Адрес электронной почты')
+        password = st.text_input('Пароль', type='password')
+        st.write('Пожалуйста, убедитесь, что ваш пароль длиннее 6-ти символов.')
+
+        username = st.text_input('Введите ваше уникальное имя пользователя.')
+
+        if st.button('Создать мой аккаунт'):
+            user = auth.create_user(email=email, password=password)
+
+            doc_ref = db.collection('users').document(user.uid)
+            doc_ref.set({
+                'uid': user.uid,
+                'email': email,
+                'timestamp': firestore.SERVER_TIMESTAMP
+            })
+
+            st.success('Аккаунт успешно создан!')
+            st.markdown('Пожалуйста, войдите в систему, используя вашу электронную почту и пароль.')
+            st.balloons()
+
+if 'logged_in' in st.session_state and st.session_state.logged_in:
+    st.write(st.session_state.useremail)
 
