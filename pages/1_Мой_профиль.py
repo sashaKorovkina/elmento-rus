@@ -58,24 +58,24 @@ def f():
     except:
         st.warning('Ошибка входа')
 
-# # sign out function
-# def t():
-#     st.session_state.signout = False
-#     st.session_state.signedout = False
-#     st.session_state.username = ''
-#
-# if 'signedout' not in st.session_state:
-#     st.session_state.signedout = False
-# if 'signout' not in st.session_state:
-#     st.session_state.signout = False
-#
-# if not st.session_state['signedout']:
-#     db = firestore.client()
-#     st.session_state.db = db
-#     docs = db.collection('users').get()
-#
-#     choice = st.selectbox('Вход/Регистрация', ['Вход', 'Регистрация'])
-#
+# sign out function
+def t():
+    st.session_state.signout = False
+    st.session_state.signedout = False
+    st.session_state.username = ''
+
+if 'signedout' not in st.session_state:
+    st.session_state.signedout = False
+if 'signout' not in st.session_state:
+    st.session_state.signout = False
+
+if not st.session_state['signedout']:
+    db = firestore.client()
+    st.session_state.db = db
+    docs = db.collection('users').get()
+
+    choice = st.selectbox('Вход/Регистрация', ['Вход', 'Регистрация'])
+
 #     if choice == 'Вход':
 #         email = st.text_input('Адрес электронной почты')
 #         password = st.text_input('Пароль', type='password')
