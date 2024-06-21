@@ -69,9 +69,9 @@ if 'signedout' not in st.session_state:
 if 'signout' not in st.session_state:
     st.session_state.signout = False
 
-# if not st.session_state['signedout']:
-#     db = firestore.client()
-#     st.session_state.db = db
+if not st.session_state['signedout']:
+    db = firestore.client()
+    st.session_state.db = db
 #     docs = db.collection('users').get()
 
 choice = st.selectbox('Вход/Регистрация', ['Вход', 'Регистрация'])
