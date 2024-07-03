@@ -92,7 +92,7 @@ if not st.session_state['signedout']:
         if st.button('Создать мой аккаунт'):
             user = auth.create_user(email=email, password=password)
 
-            st.popover('Trying to enter', *, help=None, disabled=False, use_container_width=False)
+            st.popover('Trying to enter')
 
             doc_ref = db.collection('users').document(user.uid)
             doc_ref.set({
