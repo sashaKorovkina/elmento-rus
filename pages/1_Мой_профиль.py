@@ -34,7 +34,7 @@ def initialize_firebase_app():
 # Call the function to initialize the app
 initialize_firebase_app()
 
-st.title(':blue[Elmento AI] приветствует вас!')
+st.title(':blue[Elmento AI] приветствует вас!!')
 
 if 'username' not in st.session_state:
     st.session_state.username = ''
@@ -59,10 +59,10 @@ def f():
         st.warning('Ошибка входа')
 
 # sign out function
-def t():
-    st.session_state.signout = False
-    st.session_state.signedout = False
-    st.session_state.username = ''
+# def t():
+#     st.session_state.signout = False
+#     st.session_state.signedout = False
+#     st.session_state.username = ''
 
 if 'signedout' not in st.session_state:
     st.session_state.signedout = False
@@ -72,7 +72,7 @@ if 'signout' not in st.session_state:
 if not st.session_state['signedout']:
     db = firestore.client()
     st.session_state.db = db
-    docs = db.collection('users').get()
+#     docs = db.collection('users').get()
 
     choice = st.selectbox('Вход/Регистрация', ['Вход', 'Регистрация'])
 
