@@ -38,11 +38,10 @@ st.markdown("""
     **Оплата сервиса:**
     
     Цена подписки - 490 рублей, оплата производится каждый месяц. За данную сумму пользователю доступны 50 документов в месяц. Просим обратить внимание на то, что неиспользованные с предыдущего месяца документы не переносятся на следующий и аннулируются.
-    
-    
-    
-    
-    [публичная оферта](https://docs.google.com/document/d/1bxzRyWSG01d1KmWK_GPoNk0LACZp-oZ_/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true)
-    
     """)
 
+st.markdown("""
+[публичная оферта](https://docs.google.com/document/d/1bxzRyWSG01d1KmWK_GPoNk0LACZp-oZ_/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true) | 
+[Соглашение с Подпиской](https://docs.google.com/document/d/1fOx1Q0w35NZ5iNM4f-Cf7nMIAA-wnS3t/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true) | 
+[Согласие ПнД](https://docs.google.com/document/d/1xR3ZNVAnkM5rn96EHQRdWToPRfhdynrq/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true)
+""")
