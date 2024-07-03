@@ -368,3 +368,9 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 else:
     st.write('Пожалуйста, войдите в систему или зарегистрируйтесь, чтобы просмотреть эту страницу.')
 
+st.markdown("""
+[Публичная Оферта](https://docs.google.com/document/d/1bxzRyWSG01d1KmWK_GPoNk0LACZp-oZ_/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true) | 
+[Соглашение с Подпиской](https://docs.google.com/document/d/1fOx1Q0w35NZ5iNM4f-Cf7nMIAA-wnS3t/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true) | 
+[Согласие ПнД](https://docs.google.com/document/d/1xR3ZNVAnkM5rn96EHQRdWToPRfhdynrq/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true)
+""")
+
