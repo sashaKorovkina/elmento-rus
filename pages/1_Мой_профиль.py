@@ -92,16 +92,28 @@ if not st.session_state['signedout']:
         if st.button('Создать мой аккаунт'):
             user = auth.create_user(email=email, password=password)
 
-            doc_ref = db.collection('users').document(user.uid)
-            doc_ref.set({
-                'uid': user.uid,
-                'email': email,
-                'timestamp': firestore.SERVER_TIMESTAMP
-            })
+            # Create the modal popup
+            if 'show_modal' not in st.session_state:
+                st.session_state['show_modal'] = False
 
-            st.success('Аккаунт успешно создан!')
-            st.markdown('Пожалуйста, войдите в систему, используя вашу электронную почту и пароль.')
-            st.balloons()
+            st.session_state['show_modal'] = True
+
+            if st.session_state['show_modal']:
+                with st.modal("Подтверждение"):
+                    st.write("Ваш аккаунт почти готов. Нажмите на галочку, чтобы завершить регистрацию.")
+                    if st.button('✅'):
+                        doc_ref = db.collection('users').document(user.uid)
+                        doc_ref.set({
+                            'uid': user.uid,
+                            'email': email,
+                            'username': username,
+                            'timestamp': firestore.SERVER_TIMESTAMP
+                        })
+
+                        st.session_state['show_modal'] = False
+                        st.success('Аккаунт успешно создан!')
+                        st.markdown('Пожалуйста, войдите в систему, используя вашу электронную почту и пароль.')
+                        st.balloons()
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
     st.write(st.session_state.useremail)
