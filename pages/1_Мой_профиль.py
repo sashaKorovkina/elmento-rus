@@ -91,14 +91,13 @@ if not st.session_state['signedout']:
         username = st.text_input('Введите ваше уникальное имя пользователя.')
 
         # Display the confirmation message and tick button
-        if 'show_popup' in st.session_state and st.session_state['show_popup']:
+        if 'show_create_account' not in st.session_state:
             col1, col2 = st.columns([3, 1])
             with col1:
                 st.write("Ваш аккаунт почти готов. Нажмите на галочку, чтобы завершить регистрацию.")
             with col2:
                 if st.button('✅'):
                     st.session_state['show_create_account'] = True
-                    st.session_state['show_popup'] = False
 
         # Display the 'Создать мой аккаунт' button if tick button was clicked
         if 'show_create_account' in st.session_state and st.session_state['show_create_account']:
