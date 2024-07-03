@@ -47,6 +47,7 @@ st.markdown("""
             bottom: 0;
             left: 0;
             width: 100%;
+            background-color: #f1f1f1;
             text-align: center;
             padding: 20px 0;
         }
@@ -62,7 +63,6 @@ st.markdown("""
             height: 300px; /* Adjust this height to create the desired space */
         }
     </style>
-    <div class="spacer"></div>
     <div class="footer">
         <a href="https://docs.google.com/document/d/1bxzRyWSG01d1KmWK_GPoNk0LACZp-oZ_/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true">Публичная Оферта</a> | 
         <a href="https://docs.google.com/document/d/1fOx1Q0w35NZ5iNM4f-Cf7nMIAA-wnS3t/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true">Соглашение с Подпиской</a> | 
