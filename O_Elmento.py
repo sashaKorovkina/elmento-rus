@@ -40,3 +40,9 @@ st.markdown("""
     Цена подписки - 490 рублей, оплата производится каждый месяц. За данную сумму пользователю доступны 50 документов в месяц. Просим обратить внимание на то, что неиспользованные с предыдущего месяца документы не переносятся на следующий и аннулируются.
     
     """)
+
+st.markdown("""
+<div style='text-align: center; font-size: small;'>
+    <a href='https://docs.google.com/document/d/1bxzRyWSG01d1KmWK_GPoNk0LACZp-oZ_/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true'>публичная оферта</a>
+</div>
+""", unsafe_allow_html=True)
