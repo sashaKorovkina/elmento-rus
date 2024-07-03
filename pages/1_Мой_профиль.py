@@ -94,10 +94,10 @@ if not st.session_state['signedout']:
         if 'show_create_account' not in st.session_state:
             col1, col2 = st.columns([3, 1])
             with col1:
-                st.write("Ваш аккаунт почти готов. Нажмите на галочку, чтобы завершить регистрацию.")
-            with col2:
                 if st.button('✅'):
                     st.session_state['show_create_account'] = True
+            with col2:
+                st.write("Пожалуйста, согласитесь с нашими политиками здесь: [Публичная Оферта](https://docs.google.com/document/d/1bxzRyWSG01d1KmWK_GPoNk0LACZp-oZ_/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true) , [Соглашение С Подпиской](https://docs.google.com/document/d/1fOx1Q0w35NZ5iNM4f-Cf7nMIAA-wnS3t/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true) , [Согласие ПнД](https://docs.google.com/document/d/1xR3ZNVAnkM5rn96EHQRdWToPRfhdynrq/edit?usp=sharing&ouid=117474650340329532887&rtpof=true&sd=true)")
 
         # Display the 'Создать мой аккаунт' button if tick button was clicked
         if 'show_create_account' in st.session_state and st.session_state['show_create_account']:
