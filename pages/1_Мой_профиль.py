@@ -4,6 +4,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import auth
 from firebase_admin import firestore
+from streamlit_modal import Modal
 
 def initialize_firebase_app():
     try:
@@ -90,6 +91,15 @@ if not st.session_state['signedout']:
         username = st.text_input('Введите ваше уникальное имя пользователя.')
 
         if st.button('Создать мой аккаунт'):
+            modal = Modal(key="Demo Key", title="test")
+
+            for col in st.columns(8):
+                with col:
+                    open_modal = st.button(label='button')
+                    if open_modal:
+                        with modal.container():
+                            st.markdown('testtesttesttesttesttesttesttest')
+
             user = auth.create_user(email=email, password=password)
 
             st.popover('Trying to enter')
