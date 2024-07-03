@@ -93,12 +93,11 @@ if not st.session_state['signedout']:
         if st.button('Создать мой аккаунт'):
             modal = Modal(key="Demo Key", title="test")
 
-            for col in st.columns(8):
-                with col:
-                    open_modal = st.button(label='button')
-                    if open_modal:
-                        with modal.container():
-                            st.markdown('testtesttesttesttesttesttesttest')
+
+            open_modal = st.button(label='button')
+            if open_modal:
+                with modal.container():
+                    st.markdown('testtesttesttesttesttesttesttest')
 
             user = auth.create_user(email=email, password=password)
 
