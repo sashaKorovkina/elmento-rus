@@ -96,12 +96,9 @@ if not st.session_state['signedout']:
 
             open_modal = st.button(label='button')
             if open_modal:
-                with modal.container():
-                    st.markdown('testtesttesttesttesttesttesttest')
+                modal.open()
 
             user = auth.create_user(email=email, password=password)
-
-            st.popover('Trying to enter')
 
             doc_ref = db.collection('users').document(user.uid)
             doc_ref.set({
