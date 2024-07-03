@@ -90,6 +90,8 @@ if not st.session_state['signedout']:
 
         username = st.text_input('Введите ваше уникальное имя пользователя.')
 
+        st.session_state['show_popup'] = True
+
         if 'show_popup' in st.session_state and st.session_state['show_popup']:
             st.write("Ваш аккаунт почти готов. Нажмите на галочку, чтобы завершить регистрацию.")
             if st.button('✅'):
@@ -98,7 +100,6 @@ if not st.session_state['signedout']:
                     st.session_state['user'] = user
                     st.session_state['email'] = email
                     st.session_state['username'] = username
-                    st.session_state['show_popup'] = True
 
                     doc_ref = db.collection('users').document(st.session_state['user'].uid)
                     doc_ref.set({
