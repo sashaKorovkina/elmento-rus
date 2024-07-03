@@ -97,19 +97,14 @@ if not st.session_state['signedout']:
             if st.button('✅'):
                 if st.button('Создать мой аккаунт'):
                     user = auth.create_user(email=email, password=password)
-                    st.session_state['user'] = user
-                    st.session_state['email'] = email
-                    st.session_state['username'] = username
 
-                    doc_ref = db.collection('users').document(st.session_state['user'].uid)
+                    doc_ref = db.collection('users').document(user.uid)
                     doc_ref.set({
-                        'uid': st.session_state['user'].uid,
-                        'email': st.session_state['email'],
-                        'username': st.session_state['username'],
+                        'uid': user.uid,
+                        'email': email,
                         'timestamp': firestore.SERVER_TIMESTAMP
                     })
 
-                    st.session_state['show_popup'] = False
                     st.success('Аккаунт успешно создан!')
                     st.markdown('Пожалуйста, войдите в систему, используя вашу электронную почту и пароль.')
                     st.balloons()
