@@ -90,24 +90,31 @@ if not st.session_state['signedout']:
 
         username = st.text_input('Введите ваше уникальное имя пользователя.')
 
-        st.session_state['show_popup'] = True
-
+        # Display the confirmation message and tick button
         if 'show_popup' in st.session_state and st.session_state['show_popup']:
-            st.write("Ваш аккаунт почти готов. Нажмите на галочку, чтобы завершить регистрацию.")
-            if st.button('✅'):
-                if st.button('Создать мой аккаунт'):
-                    user = auth.create_user(email=email, password=password)
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                st.write("Ваш аккаунт почти готов. Нажмите на галочку, чтобы завершить регистрацию.")
+            with col2:
+                if st.button('✅'):
+                    st.session_state['show_create_account'] = True
+                    st.session_state['show_popup'] = False
 
-                    doc_ref = db.collection('users').document(user.uid)
-                    doc_ref.set({
-                        'uid': user.uid,
-                        'email': email,
-                        'timestamp': firestore.SERVER_TIMESTAMP
-                    })
+        # Display the 'Создать мой аккаунт' button if tick button was clicked
+        if 'show_create_account' in st.session_state and st.session_state['show_create_account']:
+            if st.button('Создать мой аккаунт'):
+                user = auth.create_user(email=email, password=password)
+                doc_ref = db.collection('users').document(user.uid)
+                doc_ref.set({
+                    'uid': user.uid,
+                    'email': email,
+                    'username': username,
+                    'timestamp': firestore.SERVER_TIMESTAMP
+                })
 
-                    st.success('Аккаунт успешно создан!')
-                    st.markdown('Пожалуйста, войдите в систему, используя вашу электронную почту и пароль.')
-                    st.balloons()
+                st.success('Аккаунт успешно создан!')
+                st.markdown('Пожалуйста, войдите в систему, используя вашу электронную почту и пароль.')
+                st.balloons()
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
     st.write(st.session_state.useremail)
