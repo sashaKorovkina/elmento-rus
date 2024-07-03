@@ -92,7 +92,7 @@ if not st.session_state['signedout']:
 
         # Display the confirmation message and tick button
         if 'show_create_account' not in st.session_state:
-            col1, col2 = st.columns([1, 5])
+            col1, col2 = st.columns([1, 8])
             with col1:
                 if st.button('✅'):
                     st.session_state['show_create_account'] = True
