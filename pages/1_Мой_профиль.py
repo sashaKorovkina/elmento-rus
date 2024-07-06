@@ -75,7 +75,7 @@ if not st.session_state['signedout']:
     st.session_state.db = db
 #     docs = db.collection('users').get()
 
-    choice = st.selectbox('Регистрация/Вход', ['Вход', 'Регистрация'])
+    choice = st.selectbox('Регистрация/Вход', ['Регистрация', 'Вход'])
 
     if choice == 'Вход':
         email = st.text_input('Адрес электронной почты')
