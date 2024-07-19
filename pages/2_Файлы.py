@@ -523,8 +523,9 @@ if st.session_state.logged_in:
     for file in batch:
         extension = os.path.splitext(file['filename'])[1].lower()
         if extension not in ['.pdf', '.png', '.jpg', '.docx']:
-            st.write("Мы пока не работаем с этим типом файлов")
+            st.error("Мы пока не работаем с этим типом файлов")
             continue
+
         with grid[col]:
             with st.container(height = 900):
                 if st.button("🗑️", key=f"delete_{file['url']}", type="secondary"):
