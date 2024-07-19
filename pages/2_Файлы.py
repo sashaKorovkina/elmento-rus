@@ -104,7 +104,7 @@ def send_text_to_openai(text_content, file_id):
               "messages": [
                 {
                     "role": "user",
-                    "content": f"Having the output only in grammatically correct Russian language, summarise this text for me: ... {text_content}"
+                    "content": f" Summarize the following text in bullet points, maintaining the same language as the original text. Ensure the output is grammatically correct. If the text's language is unrecognized, provide the summary in Russian:... {text_content}"
                 }
               ],
               "max_tokens": 1000
