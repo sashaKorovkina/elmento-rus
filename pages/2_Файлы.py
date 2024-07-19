@@ -530,7 +530,7 @@ if st.session_state.logged_in:
             error_placeholder.empty()
             continue
 
-    with grid[col]:
+        with grid[col]:
             with st.container(height = 900):
                 if st.button("🗑️", key=f"delete_{file['url']}", type="secondary"):
                     delete_file(username, file['doc_id'])  # Function to delete the file
