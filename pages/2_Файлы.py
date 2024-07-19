@@ -17,6 +17,7 @@ import uuid
 from datetime import datetime, timedelta
 from io import BytesIO
 from subprocess import PIPE, run
+import time
 
 # CHANGE FOR CLOUD DEPLOY!!!!
 
@@ -523,10 +524,13 @@ if st.session_state.logged_in:
     for file in batch:
         extension = os.path.splitext(file['filename'])[1].lower()
         if extension not in ['.pdf', '.png', '.jpg', '.docx']:
-            st.error("Мы пока не работаем с этим типом файлов")
+            error_placeholder = st.empty()
+            error_placeholder.error("Мы пока не работаем с этим типом файлов")
+            time.sleep(3)  # Display the error message for 3 seconds
+            error_placeholder.empty()
             continue
 
-        with grid[col]:
+    with grid[col]:
             with st.container(height = 900):
                 if st.button("🗑️", key=f"delete_{file['url']}", type="secondary"):
                     delete_file(username, file['doc_id'])  # Function to delete the file
