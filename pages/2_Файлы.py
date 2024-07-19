@@ -426,8 +426,9 @@ def upload_single_file(uploaded_file, tmpdirname):
                 pdf_stream = io.BytesIO(pdf_bytes)
                 thumbnail_stream = pdf_page_to_image(pdf_stream)
 
+
         except Exception as e:
-            st.error(f"An error occurred: {e}")
+            st.error("Мы пока не работаем с этим типом файлов")
             return None
 
     upload_file(uploaded_file, thumbnail_stream)
