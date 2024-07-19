@@ -527,6 +527,7 @@ if st.session_state.logged_in:
                     delete_file(username, file['doc_id'])  # Function to delete the file
                 # Row for the image
                 image_row = st.empty()
+                st.write(file['filename'])
 
                 # Display the image in the image row
                 image_row.image(file['thumbnail_url'], caption=file['filename'])
