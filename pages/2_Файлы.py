@@ -521,6 +521,7 @@ if st.session_state.logged_in:
 
 
     for file in batch:
+        extension = os.path.splitext(file['filename'])[1].lower()
         if extension not in ['.pdf', '.png', '.jpg', '.docx']:
             st.write("Мы пока не работаем с этим типом файлов")
             continue
@@ -530,7 +531,7 @@ if st.session_state.logged_in:
                     delete_file(username, file['doc_id'])  # Function to delete the file
                 # Row for the image
                 image_row = st.empty()
-                extension = os.path.splitext(file['filename'])[1].lower()
+
 
                 # Display the image in the image row
                 image_row.image(file['thumbnail_url'], caption=file['filename'])
