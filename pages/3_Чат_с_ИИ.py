@@ -353,7 +353,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                         with st.chat_message("user"):
                             st.markdown(prompt)
                         # st.session_state.messages.append({"role": "user", "content": prompt})
-                        prompt_final = f'Always reply in the same language as the question was asked in. {prompt}'
+                        prompt_final = f' Respond based on the provided data from the initial prompt, maintaining the same language as the original text. Ensure the output is grammatically correct. If the text''s language is unrecognized, provide the response in Russian: {prompt}'
                         response = response_func(prompt_final, selected_chat_data['pdf_text'])
                         with st.chat_message("assistant"):
                             st.markdown(response)
